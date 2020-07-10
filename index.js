@@ -59,7 +59,7 @@ const unzipper = require('unzipper');
     // Step 1: log into spigotmc
     console.log('Logging into spigotmc...')
     await page.goto('https://www.spigotmc.org/login');
-    //await page.screenshot('./loaded.png');
+    await page.screenshot('./loaded.png');
     await page.type('#ctrl_pageLogin_login', config.spigot_login.email);
     await page.keyboard.press('Tab');
     await page.keyboard.type(config.spigot_login.password);
@@ -70,6 +70,7 @@ const unzipper = require('unzipper');
 
     // Step 2: iterate through plugins and download updates
     console.log('Checking for plugin updates...');
+    const plugins = config.plugins;
     for(const plugin in plugins) {
         console.log(`Checking ${plugin}...`);
 
@@ -188,7 +189,6 @@ const unzipper = require('unzipper');
     fs.writeFileSync('versions.json', JSON.stringify(versions));
 
     // step 3: upload files via sftp
-    const plugins = config.plugins;
     const servers = config.servers;
 
     for(const server in servers) {
