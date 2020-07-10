@@ -70,7 +70,6 @@ const unzipper = require('unzipper');
 
     // Step 2: iterate through plugins and download updates
     console.log('Checking for plugin updates...');
-    const plugins = config.plugins;
     for(const plugin in plugins) {
         console.log(`Checking ${plugin}...`);
 
