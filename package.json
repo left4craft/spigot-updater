@@ -9,6 +9,7 @@
   "author": "Captain_Sisko",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "puppeteer": "^5.0.0",
     "puppeteer-extra": "^3.1.12",
     "puppeteer-extra-plugin-stealth": "^2.4.13",
