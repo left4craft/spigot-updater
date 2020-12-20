@@ -1,19 +1,36 @@
 {
-  "name": "spigot-updater",
-  "version": "1.0.0",
-  "description": "Script that can automatically update spigot plugins, including premium ones, and upload the updated pluigins via sftp",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Captain_Sisko",
-  "license": "MIT",
-  "dependencies": {
-    "dotenv": "^8.2.0",
-    "puppeteer": "^5.0.0",
-    "puppeteer-extra": "^3.1.12",
-    "puppeteer-extra-plugin-stealth": "^2.4.13",
-    "ssh2-sftp-client": "^5.2.1",
-    "unzipper": "^0.10.11"
-  }
+	"name": "spigot-updater",
+	"version": "2.0.0",
+	"private": true,
+	"description": "An automated update system for Minecraft servers and their plugins.",
+	"main": "src/index.js",
+	"dependencies": {
+	},
+	"devDependencies": {
+		"eslint": "^7.16.0"
+	},
+	"scripts": {
+		"start": "node src/",
+		"test": "echo \"Nothing to test! Run with 'npm start'\" && exit 1"
+	},
+	"engines": {
+		"node": ">=14"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/left4craft/spigot-updater.git"
+	},
+	"keywords": [
+		"left4craft",
+		"spigot",
+		"discord",
+		"bot"
+	],
+	"author": "eartharoid",
+	"license": "GPL-3.0",
+	"bugs": {
+		"url": "https://github.com/left4craft/spigot-updater/issues"
+	},
+	"homepage": "https://github.com/left4craft/spigot-updater/#readme",
+	"funding": "https://github.com/left4craft/spigot-updater/?sponsor=1"
 }

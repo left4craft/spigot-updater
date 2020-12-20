@@ -1,6 +1,6 @@
 node_modules
-config.js
-versions.json
-downloads/
-plugins/
+logs
+data/versions.json
+data/downloads
+data/plugins
 .env
