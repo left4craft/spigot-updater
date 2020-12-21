@@ -59,11 +59,16 @@ log.info('Connecting to Discord API');
 
 bot.on('ready', () => {
 	log.success(`Authenticated as ${bot.user.tag}`);
-	// bot.channels.cache.find(c => c.name === 'server-updater').send('✅ Started');
+	bot.channels.cache.get(config.channelID).send('✅ Started');
+
+	const Updater = require('./updater');
+	const updater = new Updater(bot);
+	updater.run();
+	setInterval(updater.run, 86400000); // run every 24h
 });
 
 bot.on('messageReactionAdd', (r, u) => {
-	
+	log.console('Message reaction event received');
 });
 
 bot.login();
