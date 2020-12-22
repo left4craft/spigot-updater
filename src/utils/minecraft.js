@@ -12,22 +12,22 @@ module.exports = {
 
 				let host = servers[server].host.split(':'),
 					ip = host[0],
-					port = host[1];
-				
-				let data = minecraft.status(ip, {
+					port = Number(host[1]);
+
+				minecraft.status(ip, {
 					port
-				}).then(() => {
+				}).then(data => {
 					resolve(data.onlinePlayers);
-				}).catch(() => {
+				}).catch(e => {
 					bot.log.warn(`Failed to get player count for ${server} server`);
+					bot.log.error(e);
 					resolve(0);
 				});
 
 			} else if (servers[server].left4status && config.left4status.length > 1) {
 
 				let host = config.left4status;
-				if (host[host.length - 1] !== '/')
-					host += '/';
+				if (host[host.length - 1] !== '/') host += '/';
 				fetch(host + 'api/status/minecraft')
 					.then(res => res.json())
 					.then(json => {

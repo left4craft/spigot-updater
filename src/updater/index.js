@@ -1,19 +1,18 @@
-const { getPlayerCount } = require('../utils/minecraft');
 class Updater {
 	constructor(bot) {
 		this.bot = bot;
 		this.checkForUpdates = require('./checkForUpdates');
-		this.updateServers = require('./updateServers');
-		this.updatePlugins = require('./updatePlugins');
+		this.downloadServers = require('./downloadServers');
+		this.downloadPlugins = require('./downloadPlugins');
+		this.uploadFiles = require('./uploadFiles');
 	}
 
 	async run() {
 		this.bot.log.info('Running daily update task');
 		await this.checkForUpdates(this.bot);
-		this.bot.log.warn(await getPlayerCount());
-		if (! await getPlayerCount() < this.bot.config.maxPlayers) return;
-		await this.updateServers(this.bot);
-		await this.updatePlugins(this.bot);
+		await this.downloadServers(this.bot);
+		await this.downloadPlugins(this.bot);
+		await this.uploadFiles(this.bot);
 	}
 }
 
