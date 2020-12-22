@@ -1,5 +1,7 @@
 # Spigot Updater
 
+**Automated server updater for Pterodactyl.**
+
 ## What it does
 
 ## How it works
