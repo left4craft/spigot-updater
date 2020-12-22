@@ -1,6 +1,7 @@
 module.exports = {
 	color: '#66AA44',
-	channelID: '731316455924039722',
-	saveLogs: true,
+	channel_id: '731316455924039722',
+	leftstatus: 'https://status.left4craft.org/', // optional
+	save_logs: true,
 	debug: false,
 };

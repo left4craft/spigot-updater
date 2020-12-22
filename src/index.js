@@ -26,7 +26,7 @@ const Logger = require('leekslazylogger');
 const log = new Logger({
 	name: 'Server updater',
 	debug: config.debug,
-	logToFile: config.saveLogs
+	logToFile: config.save_logs
 });
 
 
@@ -59,7 +59,7 @@ log.info('Connecting to Discord API');
 
 bot.on('ready', () => {
 	log.success(`Authenticated as ${bot.user.tag}`);
-	bot.channels.cache.get(config.channelID).send('✅ Started');
+	// bot.channels.cache.get(config.channel_id).send('✅ Started');
 
 	const Updater = require('./updater');
 	const updater = new Updater(bot);
