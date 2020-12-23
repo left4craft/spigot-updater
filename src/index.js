@@ -6,7 +6,7 @@
 
 require('dotenv').config();
 const fs = require('fs');
-const { path } = require('./utils');
+const { path } = require('./utils/fs');
 
 const config = require('../config/config');
 
