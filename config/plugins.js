@@ -21,6 +21,13 @@ module.exports = {
 	left4chat: {
 		source: 'github',
 		repository: 'left4craft/left4chat',
+		asset: 'Left4Chat.jar',
 		jar: 'Left4Chat.jar'
+	},
+	essentialsx: {
+		source: 'github',
+		repository: 'essentialsx/essentials',
+		asset: /EssentialsX-\S*\.jar/g, // regex for versioned names,
+		jar: 'EssentialsX.jar'
 	},
 };
