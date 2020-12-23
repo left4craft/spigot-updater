@@ -45,7 +45,6 @@ class Bot extends DiscordClient {
 		super({
 			autoReconnect: true,
 		});
-
 		Object.assign(this, {
 			config,
 			log
@@ -57,20 +56,20 @@ const bot = new Bot();
 
 log.info('Connecting to Discord API');
 
-bot.on('ready', () => {
+bot.on('ready', async () => {
 	log.success(`Authenticated as ${bot.user.tag}`);
 	// bot.channels.cache.get(config.channel_id).send('✅ Started');
 
 	const Updater = require('./updater');
 	const updater = new Updater(bot);
 
-	updater.check();
-	updater.download();
-	updater.run();
+	await updater.check();
+	await updater.download();
+	await updater.run();
 
-	setInterval(updater.check, 86400000); // check every day
-	setInterval(updater.download, 3600000); // download every hour
-	setInterval(updater.run, 43200000); // run every 12 hours
+	setInterval(() => updater.check(), 86400000); // check every day
+	setInterval(() => updater.download(), 3600000); // download every hour
+	setInterval(() => updater.run(), 43200000); // run every 12 hours
 });
 
 bot.on('messageReactionAdd', (r, u) => {
