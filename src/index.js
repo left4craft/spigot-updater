@@ -63,8 +63,14 @@ bot.on('ready', () => {
 
 	const Updater = require('./updater');
 	const updater = new Updater(bot);
+
+	updater.check();
+	updater.download();
 	updater.run();
-	setInterval(updater.run, 86400000); // run every 24h
+
+	setInterval(updater.check, 86400000); // check every day
+	setInterval(updater.download, 3600000); // download every hour
+	setInterval(updater.run, 43200000); // run every 12 hours
 });
 
 bot.on('messageReactionAdd', (r, u) => {
