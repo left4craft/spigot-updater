@@ -4,18 +4,6 @@
  * @license GNU-GPLv3
  */
 
-/**
- * 
-
-
-
- * @TODO check data/downloads and data/plugins exist
-
-
-
-
- */
-
 require('dotenv').config();
 const fs = require('fs');
 const { path } = require('./utils');
@@ -28,7 +16,6 @@ const log = new Logger({
 	debug: config.debug,
 	logToFile: config.save_logs
 });
-
 
 if (!fs.existsSync(path('data/downloads')))
 	fs.mkdirSync(path('data/downloads')),
@@ -77,3 +64,6 @@ bot.on('messageReactionAdd', (r, u) => {
 });
 
 bot.login();
+
+
+// 69 ;)
