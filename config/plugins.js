@@ -1,6 +1,6 @@
 module.exports = {	
 	Spartan: {
-		source: 'spigot', // spigot | github | direct
+		source: 'spigot', // spigot | github | jenkins | direct
 		url: 'https://www.spigotmc.org/resources/spartan-advanced-anti-cheat-hack-blocker.25638/',
 		jar: 'Spartan.jar'
 	},
@@ -24,6 +24,13 @@ module.exports = {
 		asset: 'Left4Chat.jar',
 		jar: 'Left4Chat.jar'
 	},
+	/* EssentialsX: {
+		source: 'jenkins',
+		host: 'https://ci.ender.zone/',
+		job: 'EssentialsX',
+		artifact: /EssentialsX-\S*\.jar/g, // regex for versioned names,
+		jar: 'EssentialsX.jar'
+	}, */
 	EssentialsX: {
 		source: 'github',
 		repository: 'essentialsx/essentials',
