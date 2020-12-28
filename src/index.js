@@ -8,9 +8,10 @@ require('dotenv').config();
 const Logger = require('leekslazylogger');
 const fs = require('fs');
 const { path } = require('./utils/fs');
+const { capitalise } = require('./utils');
 
 const { Client: DiscordClient } = require('discord.js');
-// ✅❌⚠️❗
+// ✅❌⚠️❗🆕
 class Bot extends DiscordClient {
 	constructor() {
 		super({
@@ -28,13 +29,20 @@ class Bot extends DiscordClient {
 		utils.init(this);
 		this.Embed = utils.Embed;
 
-		if (!fs.existsSync(path('data/downloads')))
-			fs.mkdirSync(path('data/downloads')),
-			this.log.console('Downloads directory not found, creating it for you...');
+		fs.readdir(path('data/'), (err, items) => {
+			let directories = ['downloads', 'plugins'],
+				files = ['messages.json', 'plugins.json', 'servers.json'];
+			
+			for (let d of directories)
+				if (!items.includes(d))
+					fs.mkdirSync(path('data/' + d)),
+					this.log.console(`${capitalise(d)} directory not found, creating it for you...`);
 
-		if (!fs.existsSync(path('data/plugins')))
-			fs.mkdirSync(path('data/plugins')),
-			this.log.console('Plugins directory not found, creating it for you...');
+			for (let f of files)
+				if (!items.includes(f))
+					fs.writeFileSync(path('data/' + f), '{}'),
+					this.log.console(`${f} data file not found, creating it for you...`);	
+		});
 
 		this.log.info('Connecting to Discord API');
 

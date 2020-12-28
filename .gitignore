@@ -1,6 +1,8 @@
 node_modules
 logs
-data/versions.json
+data/servers.json
+data/plugins.json
+data/messages.json
 data/downloads
 data/plugins
 .env

@@ -2,7 +2,7 @@
 	"name": "spigot-updater",
 	"version": "2.0.0",
 	"private": true,
-	"description": "An automated update system for Minecraft servers using Pterodactyl.",
+	"description": "An automated update system for Minecraft servers and their plugins using Pterodactyl.",
 	"main": "src/index.js",
 	"dependencies": {
 		"discord.js": "^12.5.1",
