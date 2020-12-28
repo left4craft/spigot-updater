@@ -1,4 +1,5 @@
 module.exports = {
+	server_name: 'Left4Craft',
 	color: '#66AA44',
 	channel_id: '731316455924039722',
 	/**

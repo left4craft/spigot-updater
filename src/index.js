@@ -10,19 +10,23 @@ const fs = require('fs');
 const { path } = require('./utils/fs');
 
 const { Client: DiscordClient } = require('discord.js');
-
+// ✅❌⚠️❗
 class Bot extends DiscordClient {
 	constructor() {
 		super({
 			autoReconnect: true,
 		});
-
+		
 		this.config = require('../config/config');
 		this.log = new Logger({
 			name: 'Server updater',
 			debug: this.config.debug,
 			logToFile: this.config.save_logs
 		});
+
+		let utils = require('./utils/discord');
+		utils.init(this);
+		this.Embed = utils.Embed;
 
 		if (!fs.existsSync(path('data/downloads')))
 			fs.mkdirSync(path('data/downloads')),

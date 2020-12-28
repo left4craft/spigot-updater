@@ -8,18 +8,36 @@ class Updater {
 	}
 
 	async check() {
-		this.bot.log.info('Running daily update check task');
+		let message = 'Running daily update check task';
+		this.bot.log.info(message);
+		/* this.bot.channel.send(
+			new this.bot.Embed()
+				.setTitle(`❗ ${message}`)
+		); */
+		
 		await this.checkForUpdates(this.bot);
 	}
 
 	async download() {
-		this.bot.log.info('Running hourly download task');
+		let message = 'Running hourly download task';
+		this.bot.log.info(message);
+		/* this.bot.channel.send(
+			new this.bot.Embed()
+				.setTitle(`❗ ${message}`)
+		); */
+
 		await this.downloadServers(this.bot);
 		await this.downloadPlugins(this.bot);
 	}
 	
 	async run() {
-		this.bot.log.info('Running bi-daily upload task');
+		let message = 'Running bi-daily upload task';
+		this.bot.log.info(message);
+		/* this.bot.channel.send(
+			new this.bot.Embed()
+				.setTitle(`❗ ${message}`)
+		); */
+
 		await this.uploadFiles(this.bot);
 	}
 }
