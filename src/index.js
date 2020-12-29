@@ -28,7 +28,8 @@ class Bot extends DiscordClient {
 		
 		Object.assign(this, {
 			config,
-			log
+			log,
+			messages: new Map(),
 		});
 
 		let utils = require('./utils/discord');
@@ -39,10 +40,10 @@ class Bot extends DiscordClient {
 			let directories = ['downloads', 'plugins'],
 				// files = ['messages.json', 'plugins.json', 'servers.json'];
 				files = {
-					messages: {
+					/* messages: {
 						file: 'messages.json',
 						template: '{}'
-					},
+					}, */
 					plugins: {
 						file: 'plugins.json',
 						template: '{}'
@@ -87,6 +88,11 @@ class Bot extends DiscordClient {
 
 		this.on('messageReactionAdd', (r, u) => {
 			if (u.id === this.user.id) return;
+			if (r.emoji.name !== '✅' || r.message.channel.id !== this.config.channel_id) return;
+
+			let data = this.messages.get(r.message.id);
+			// console.log(data);
+
 			this.log.console('Message reaction event received');
 			// current, approved
 			// delete msg from file

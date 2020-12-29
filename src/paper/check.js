@@ -7,7 +7,6 @@ module.exports = async bot => {
 
 	const API = 'https://papermc.io/api/v2/projects';
 	let storage = JSON.parse(fs.readFileSync(path('data/servers.json')));
-	let messages = JSON.parse(fs.readFileSync(path('data/messages.json')));
 	
 	// this is just a check
 	let { projects: valid } = (await (await fetch(API)).json());
@@ -65,7 +64,7 @@ module.exports = async bot => {
 						.addField('Affected servers', `Servers using ${data.project_name} ${v}:\n${affected.join(', ')}`)
 				);
 				msg.react('✅');
-				messages[msg.id] = {
+				bot.messages.set(msg.id, {
 					server_jar: {
 						type: p,
 						version: latest.version,
@@ -73,11 +72,10 @@ module.exports = async bot => {
 						changes: latest.changes,
 						file: latest.downloads.application
 					}
-				};
+				});
 			}
 			
 		}
 		fs.writeFileSync(path('data/servers.json'), JSON.stringify(storage)); // JSON.stringify(storage, null, 4)
-		fs.writeFileSync(path('data/messages.json'), JSON.stringify(messages)); // JSON.stringify(messages, null, 4)
 	}
 };
