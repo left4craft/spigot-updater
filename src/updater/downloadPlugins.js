@@ -1,3 +1,3 @@
 module.exports = async (bot) => {
-	bot.log.info('Updating plugins');
+	bot.log.console('Downloading plugins');
 };

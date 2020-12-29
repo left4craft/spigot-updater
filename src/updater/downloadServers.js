@@ -1,3 +1,3 @@
 module.exports = async (bot) => {
-	bot.log.info('Updating servers');
+	bot.log.console('Downloading servers');
 };

@@ -88,6 +88,8 @@ class Bot extends DiscordClient {
 		this.on('messageReactionAdd', (r, u) => {
 			if (u.id === this.user.id) return;
 			this.log.console('Message reaction event received');
+			// current, approved
+			// delete msg from file
 		});
 	}
 }
