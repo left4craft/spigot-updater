@@ -29,6 +29,7 @@ module.exports = {
 		]
 	},
 	survival: {
+		// host: 'mc.left4craft.org:25567',
 		left4status: 'survival',
 		jar: {
 			type: 'paper',
@@ -43,6 +44,7 @@ module.exports = {
 		]
 	},
 	creative: {
+		// host: 'mc.left4craft.org:25568',
 		left4status: 'creative',
 		jar: {
 			type: 'paper',
@@ -57,6 +59,7 @@ module.exports = {
 		]
 	},
 	minigames: {
+		// host: 'mc.left4craft.org:25569',
 		left4status: 'minigames',
 		jar: {
 			type: 'paper',
@@ -71,6 +74,7 @@ module.exports = {
 		]
 	},
 	build: {
+		// host: 'mc.left4craft.org:25570',
 		left4status: 'build',
 		jar: {
 			type: 'paper',
