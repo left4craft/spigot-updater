@@ -5,10 +5,18 @@
  */
 
 require('dotenv').config();
-const Logger = require('leekslazylogger');
 const fs = require('fs');
 const { path } = require('./utils/fs');
 const { capitalise } = require('./utils');
+
+const config = require('../config/config');
+
+const Logger = require('leekslazylogger');
+const log = new Logger({
+	name: 'Server updater',
+	debug: config.debug,
+	logToFile: config.save_logs
+});
 
 const { Client: DiscordClient } = require('discord.js');
 // ✅❌⚠️❗🆕
@@ -18,11 +26,9 @@ class Bot extends DiscordClient {
 			autoReconnect: true,
 		});
 		
-		this.config = require('../config/config');
-		this.log = new Logger({
-			name: 'Server updater',
-			debug: this.config.debug,
-			logToFile: this.config.save_logs
+		Object.assign(this, {
+			config,
+			log
 		});
 
 		let utils = require('./utils/discord');
@@ -31,16 +37,30 @@ class Bot extends DiscordClient {
 
 		fs.readdir(path('data/'), (err, items) => {
 			let directories = ['downloads', 'plugins'],
-				files = ['messages.json', 'plugins.json', 'servers.json'];
+				// files = ['messages.json', 'plugins.json', 'servers.json'];
+				files = {
+					messages: {
+						file: 'messages.json',
+						template: '{}'
+					},
+					plugins: {
+						file: 'plugins.json',
+						template: '{}'
+					},
+					servers: {
+						file: 'servers.json',
+						template: '{"servers":{},"versions":{}}'
+					}
+				};
 			
 			for (let d of directories)
 				if (!items.includes(d))
 					fs.mkdirSync(path('data/' + d)),
 					this.log.console(`${capitalise(d)} directory not found, creating it for you...`);
 
-			for (let f of files)
-				if (!items.includes(f))
-					fs.writeFileSync(path('data/' + f), '{}'),
+			for (let f in files)
+				if (!items.includes(files[f].file))
+					fs.writeFileSync(path('data/' + files[f].file), files[f].template),
 					this.log.console(`${f} data file not found, creating it for you...`);	
 		});
 
@@ -66,6 +86,7 @@ class Bot extends DiscordClient {
 		});
 
 		this.on('messageReactionAdd', (r, u) => {
+			if (u.id === this.user.id) return;
 			this.log.console('Message reaction event received');
 		});
 	}
@@ -73,3 +94,9 @@ class Bot extends DiscordClient {
 
 const bot = new Bot();
 bot.login();
+
+process.on('unhandledRejection', error => {
+	log.warn('An error was not caught');
+	if (error instanceof Error) log.warn(`Uncaught ${error.name}: ${error.message}`);
+	log.error(error);
+});
