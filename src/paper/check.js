@@ -42,6 +42,7 @@ module.exports = async bot => {
 			if (!storage.versions[p][v].latest) storage.versions[p][v].latest = {};
 
 			if (storage.versions[p][v].latest.build !== latest.build) {
+				bot.log.console(`Found an update for ${data.project_name} (${storage.versions[p][v].latest.build} -> ${latest.build})`);
 				storage.versions[p][v].latest = {
 					version: latest.version,
 					build: latest.build,
@@ -64,7 +65,7 @@ module.exports = async bot => {
 						.addField('Affected servers', `Servers using ${data.project_name} ${v}:\n${affected.join(', ')}`)
 				);
 				msg.react('✅');
-				messages[msg] = {
+				messages[msg.id] = {
 					server_jar: {
 						type: p,
 						version: latest.version,
@@ -77,6 +78,6 @@ module.exports = async bot => {
 			
 		}
 		fs.writeFileSync(path('data/servers.json'), JSON.stringify(storage)); // JSON.stringify(storage, null, 4)
-		fs.writeFileSync(path('data/servers.json'), JSON.stringify(messages)); // JSON.stringify(messages, null, 4)
+		fs.writeFileSync(path('data/messages.json'), JSON.stringify(messages)); // JSON.stringify(messages, null, 4)
 	}
 };
