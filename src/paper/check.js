@@ -67,7 +67,10 @@ module.exports = async bot => {
 				messages[msg] = {
 					server_jar: {
 						type: p,
-						build: latest.build
+						version: latest.version,
+						build: latest.build,
+						changes: latest.changes,
+						file: latest.downloads.application
 					}
 				};
 			}
