@@ -50,7 +50,8 @@ module.exports = async bot => {
 				};
 				let affected = Object.keys(servers)
 					.filter(s => servers[s].jar.type === p && servers[s].jar.version === v)
-					.map(s => `\`${s}\``);
+					.map(s => `\`${s}\``)
+					.join(', ');
 				let changes = latest.changes
 					// .map(c => '> ' + c.message.replace(/\n\S/gm, '\n> '))
 					.map(c => `> [${c.summary}](https://github.com/PaperMC/${data.project_name}/commit/${c.commit})`)
@@ -61,7 +62,8 @@ module.exports = async bot => {
 						.setTitle(`🆕 A new build of ${data.project_name} ${latest.version} is available`)
 						.setDescription('React with ✅ to approve this update and add it to the queue.')
 						.addField('Changelog', 'Click commit summaries for more details.\n' + changes)
-						.addField('Affected servers', `Servers using ${data.project_name} ${v}:\n${affected.join(', ')}`)
+						.addField('Affected servers', `Servers using ${data.project_name} ${v}:\n${affected}`)
+						.setFooter(`Build ${latest.build}`)
 				);
 				msg.react('✅');
 				bot.messages.set(msg.id, {

@@ -26,24 +26,22 @@ class Bot extends DiscordClient {
 			autoReconnect: true,
 		});
 		
+		this.utils = require('./utils/discord');
+		this.utils.init(this);
+
 		Object.assign(this, {
 			config,
+			db: require('./database')(log),
+			Embed: this.utils.Embed,
 			log,
 			messages: new Map(),
 		});
 
-		let utils = require('./utils/discord');
-		utils.init(this);
-		this.Embed = utils.Embed;
 
 		fs.readdir(path('data/'), (err, items) => {
-			let directories = ['downloads', 'plugins'],
+			let directories = ['downloads', 'plugins']/* ,
 				// files = ['messages.json', 'plugins.json', 'servers.json'];
 				files = {
-					/* messages: {
-						file: 'messages.json',
-						template: '{}'
-					}, */
 					plugins: {
 						file: 'plugins.json',
 						template: '{}'
@@ -52,17 +50,17 @@ class Bot extends DiscordClient {
 						file: 'servers.json',
 						template: '{"servers":{},"versions":{}}'
 					}
-				};
+				} */;
 			
 			for (let d of directories)
 				if (!items.includes(d))
 					fs.mkdirSync(path('data/' + d)),
 					this.log.console(`${capitalise(d)} directory not found, creating it for you...`);
 
-			for (let f in files)
+			/* for (let f in files)
 				if (!items.includes(files[f].file))
 					fs.writeFileSync(path('data/' + files[f].file), files[f].template),
-					this.log.console(`${f} data file not found, creating it for you...`);	
+					this.log.console(`${capitalise(f)} data file not found, creating it for you...`);	 */
 		});
 
 		this.log.info('Connecting to Discord API');
@@ -95,6 +93,23 @@ class Bot extends DiscordClient {
 			if (data.server_jar) { // server jar
 				this.log.console(`${u.username} approved an update`);
 				// current, approved
+
+				/**
+				{
+				 	server_jar: {
+				 		type: 'paper',
+				 		version: '1.16.4',
+				 		build: 352,
+				 		changes: [
+				 			[Object]
+				 		],
+				 		file: {
+				 			name: 'paper-1.16.4-352.jar',
+				 			sha256: '5dd29d4ee032bd3e635e856c61b49b5da86c8feb98d7923f4984059fef374af7'
+				 		}
+					}
+				}
+				 */
 
 			} else { // plugin
 
