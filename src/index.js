@@ -91,11 +91,17 @@ class Bot extends DiscordClient {
 			if (r.emoji.name !== '✅' || r.message.channel.id !== this.config.channel_id) return;
 
 			let data = this.messages.get(r.message.id);
-			// console.log(data);
 
-			this.log.console('Message reaction event received');
-			// current, approved
-			// delete msg from file
+			if (data.server_jar) { // server jar
+				this.log.console(`${u.username} approved an update`);
+				// current, approved
+
+			} else { // plugin
+
+			}
+
+			// remove this message form the map, it has been approved
+			this.messages.delete(r.message.id);
 		});
 	}
 }
