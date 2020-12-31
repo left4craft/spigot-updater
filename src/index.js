@@ -18,6 +18,16 @@ const log = new Logger({
 	logToFile: config.save_logs
 });
 
+fs.readdir(path('data/'), (err, items) => {
+	let directories = ['downloads', 'plugins'];
+	for (let d of directories) {
+		if (!items.includes(d)) {
+			fs.mkdirSync(path('data/' + d));
+			this.log.console(`${capitalise(d)} directory not found, creating it for you...`);
+		}
+	}		
+});
+
 const { Client: DiscordClient } = require('discord.js');
 // ✅❌⚠️❗🆕
 class Bot extends DiscordClient {
@@ -37,31 +47,7 @@ class Bot extends DiscordClient {
 			messages: new Map(),
 		});
 
-
-		fs.readdir(path('data/'), (err, items) => {
-			let directories = ['downloads', 'plugins']/* ,
-				// files = ['messages.json', 'plugins.json', 'servers.json'];
-				files = {
-					plugins: {
-						file: 'plugins.json',
-						template: '{}'
-					},
-					servers: {
-						file: 'servers.json',
-						template: '{"servers":{},"versions":{}}'
-					}
-				} */;
-			
-			for (let d of directories)
-				if (!items.includes(d))
-					fs.mkdirSync(path('data/' + d)),
-					this.log.console(`${capitalise(d)} directory not found, creating it for you...`);
-
-			/* for (let f in files)
-				if (!items.includes(files[f].file))
-					fs.writeFileSync(path('data/' + files[f].file), files[f].template),
-					this.log.console(`${capitalise(f)} data file not found, creating it for you...`);	 */
-		});
+		
 
 		this.log.info('Connecting to Discord API');
 
@@ -94,22 +80,6 @@ class Bot extends DiscordClient {
 				this.log.console(`${u.username} approved an update`);
 				// current, approved
 
-				/**
-				{
-				 	server_jar: {
-				 		type: 'paper',
-				 		version: '1.16.4',
-				 		build: 352,
-				 		changes: [
-				 			[Object]
-				 		],
-				 		file: {
-				 			name: 'paper-1.16.4-352.jar',
-				 			sha256: '5dd29d4ee032bd3e635e856c61b49b5da86c8feb98d7923f4984059fef374af7'
-				 		}
-					}
-				}
-				 */
 
 			} else { // plugin
 
@@ -118,11 +88,12 @@ class Bot extends DiscordClient {
 			// remove this message form the map, it has been approved
 			this.messages.delete(r.message.id);
 		});
+
+		this.login();
 	}
 }
 
-const bot = new Bot();
-bot.login();
+new Bot();
 
 process.on('unhandledRejection', error => {
 	log.warn('An error was not caught');
