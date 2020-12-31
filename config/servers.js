@@ -58,9 +58,9 @@ module.exports = {
 			'spartan',
 		]
 	},
-	minigames: {
+	partygames: {
 		// host: 'mc.left4craft.org:25569',
-		left4status: 'minigames',
+		left4status: 'partygames',
 		jar: {
 			type: 'paper',
 			version: '1.16',

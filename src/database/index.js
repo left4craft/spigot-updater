@@ -1,8 +1,6 @@
 const fs = require('fs');
 const { path } = require('../utils/fs');
 
-const { capitalise } = require('../utils');
-
 const {
 	Sequelize,
 	Model

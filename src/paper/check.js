@@ -1,14 +1,11 @@
-const fs = require('fs');
 const fetch = require('node-fetch');
 const servers = require('../../config/servers');
-const { path } = require('../utils/fs');
 
 module.exports = async bot => {
 
 	const API = 'https://papermc.io/api/v2/projects';
-	let storage = JSON.parse(fs.readFileSync(path('data/servers.json')));
 	
-	// this is just a check
+	// this is just a warning, you'll probably get an error a few seconds later
 	let { projects: valid } = (await (await fetch(API)).json());
 	if (valid instanceof Array) { // if there isn't an error above
 		for (let s in servers) {
@@ -36,18 +33,39 @@ module.exports = async bot => {
 				{ builds } = data,
 				latest = builds[builds.length - 1];
 
-			if (!storage.versions[p]) storage.versions[p] = {};
-			if (!storage.versions[p][v]) storage.versions[p][v] = {};
-			if (!storage.versions[p][v].latest) storage.versions[p][v].latest = {};
+			let jar = await bot.db.ServerJars.findOne({
+				where: {
+					type: p,
+					version: v
+				}
+			});
 
-			if (storage.versions[p][v].latest.build !== latest.build) {
-				bot.log.console(`Found an update for ${data.project_name} (${storage.versions[p][v].latest.build} -> ${latest.build})`);
-				storage.versions[p][v].latest = {
-					version: latest.version,
-					build: latest.build,
-					changes: latest.changes,
-					file: latest.downloads.application
-				};
+			if (!jar) {
+				jar = await bot.db.ServerJars.create({
+					id: `${p}-${v.replace(/\./g, '-')}`,
+					type: p,
+					version: v
+				});
+			}
+
+			if (jar.get('latest_build') !== latest.build) {
+
+				bot.log.console(`Found an update for ${data.project_name} (${jar.get('latest_build') || 0} -> ${latest.build})`);
+
+				/* jar.set('latest_version', latest.version); 
+				jar.set('latest_build', latest.build); 
+				jar.set('latest_changes', JSON.stringify(latest.changes)); 
+				jar.set('latest_file', latest.downloads.application.name); 
+				jar.save(); */
+
+				jar = await jar.update({
+					latest_version: latest.version,
+					latest_build: latest.build,
+					latest_changes: JSON.stringify(latest.changes),
+					latest_file: latest.downloads.application.name,
+					latest_checksum: latest.downloads.application.sha256,
+				});
+
 				let affected = Object.keys(servers)
 					.filter(s => servers[s].jar.type === p && servers[s].jar.version === v)
 					.map(s => `\`${s}\``)
@@ -58,7 +76,8 @@ module.exports = async bot => {
 					.join('\n\n');
 					
 				let msg = await bot.channel.send(
-					new bot.Embed()
+					// new bot.Embed()
+					bot.utils.createEmbed()
 						.setTitle(`🆕 A new build of ${data.project_name} ${latest.version} is available`)
 						.setDescription('React with ✅ to approve this update and add it to the queue.')
 						.addField('Changelog', 'Click commit summaries for more details.\n' + changes)
@@ -75,9 +94,9 @@ module.exports = async bot => {
 						file: latest.downloads.application
 					}
 				});
+
 			}
 			
 		}
-		fs.writeFileSync(path('data/servers.json'), JSON.stringify(storage)); // JSON.stringify(storage, null, 4)
 	}
 };
