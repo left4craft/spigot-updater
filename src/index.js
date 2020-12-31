@@ -47,8 +47,6 @@ class Bot extends DiscordClient {
 			messages: new Map(),
 		});
 
-		
-
 		this.log.info('Connecting to Discord API');
 
 		this.on('ready', async () => {

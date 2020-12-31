@@ -50,7 +50,7 @@ module.exports = async bot => {
 
 			if (jar.get('latest_build') !== latest.build) {
 
-				bot.log.console(`Found an update for ${data.project_name} (${jar.get('latest_build') || 0} -> ${latest.build})`);
+				bot.log.console(`Found an update for ${data.project_name} ${v} (${jar.get('latest_build') || 0} -> ${latest.build})`);
 
 				/* jar.set('latest_version', latest.version); 
 				jar.set('latest_build', latest.build); 
@@ -91,7 +91,8 @@ module.exports = async bot => {
 						version: latest.version,
 						build: latest.build,
 						changes: latest.changes,
-						file: latest.downloads.application
+						file: latest.downloads.application,
+						latest_checksum: latest.downloads.application.sha256,
 					}
 				});
 
