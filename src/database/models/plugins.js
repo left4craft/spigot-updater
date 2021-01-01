@@ -7,6 +7,7 @@ module.exports = {
 			type: DataTypes.STRING,
 			primaryKey: true
 		},
+		current: DataTypes.STRING,
 		approved: DataTypes.STRING,
 	}
 };

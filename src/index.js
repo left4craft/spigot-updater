@@ -68,15 +68,44 @@ class Bot extends DiscordClient {
 			setInterval(() => updater.run(), 43200000); // run every 12 hours
 		});
 
-		this.on('messageReactionAdd', (r, u) => {
+		this.on('messageReactionAdd', async (r, u) => {
 			if (u.id === this.user.id) return;
 			if (r.emoji.name !== '✅' || r.message.channel.id !== this.config.channel_id) return;
 
 			let data = this.messages.get(r.message.id);
+			if(!data) return;
 
 			if (data.server_jar) { // server jar
-				this.log.console(`${u.username} approved an update`);
-				// current, approved
+				data = data.server_jar;
+				let jar = await this.db.ServerJars.findOne({
+					where: {
+						type: data.type,
+						version: data.version
+					}
+				});
+				
+				await jar.update({
+					approved_build: data.build
+				});
+
+				this.log.console(`${u.username} approved an update for ${capitalise(data.type)}`);
+	
+				/**
+			{
+				  server_jar: {
+						type: 'paper',
+						version: '1.16.4',
+						build: 352,
+						changes: [
+							[Object]
+						],
+						file: {
+							name: 'paper-1.16.4-352.jar',
+							sha256: '5dd29d4ee032bd3e635e856c61b49b5da86c8feb98d7923f4984059fef374af7'
+						}
+				}
+			}
+			 */
 
 
 			} else { // plugin
