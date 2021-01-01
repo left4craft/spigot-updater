@@ -88,10 +88,11 @@ module.exports = async bot => {
 				bot.messages.set(msg.id, {
 					server_jar: {
 						type: p,
-						version: latest.version,
+						version: v,
+						actual_version: latest.version,
 						build: latest.build,
 						changes: latest.changes,
-						file: latest.downloads.application,
+						file: latest.downloads.application.name,
 						latest_checksum: latest.downloads.application.sha256,
 					}
 				});

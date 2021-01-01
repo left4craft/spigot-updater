@@ -85,7 +85,7 @@ module.exports = async bot => {
 					bot.utils.createEmbed()
 						.setTitle(`🆕 A new build of ${capitalise(p)} ${latest.version} is available`)
 						.setDescription('React with ✅ to approve this update and add it to the queue.')
-						.addField('Changelog', 'ServerJars API does not provide a changelog or commit details.')
+						// .addField('Changelog', 'ServerJars API does not provide a changelog or commit details.')
 						.addField('Affected servers', `Servers using ${capitalise(p)} ${v}:\n${affected}`)
 						.setFooter(`Built at ${new Date(latest.built * 1000).toLocaleString()}`)
 				);
@@ -93,7 +93,8 @@ module.exports = async bot => {
 				bot.messages.set(msg.id, {
 					server_jar: {
 						type: p,
-						version: latest.version,
+						version: v,
+						actual_version: latest.version,
 						build: latest.built,
 						file: latest.file,
 						latest_checksum: latest.md5,

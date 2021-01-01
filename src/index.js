@@ -73,7 +73,7 @@ class Bot extends DiscordClient {
 			if (r.emoji.name !== '✅' || r.message.channel.id !== this.config.channel_id) return;
 
 			let data = this.messages.get(r.message.id);
-			if(!data) return;
+			if (!data) return;
 
 			if (data.server_jar) { // server jar
 				data = data.server_jar;
@@ -83,7 +83,7 @@ class Bot extends DiscordClient {
 						version: data.version
 					}
 				});
-				
+
 				await jar.update({
 					approved_build: data.build
 				});
