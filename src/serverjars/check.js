@@ -97,7 +97,7 @@ module.exports = async bot => {
 						actual_version: latest.version,
 						build: latest.built,
 						file: latest.file,
-						latest_checksum: latest.md5,
+						checksum: latest.md5,
 					}
 				});
 

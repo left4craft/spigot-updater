@@ -85,31 +85,16 @@ class Bot extends DiscordClient {
 				});
 
 				await jar.update({
-					approved_build: data.build
+					approved_version: data.version,
+					approved_build: data.build,
+					approved_file: data.file,
+					approved_checksum: data.checksum,
 				});
 
 				this.log.console(`${u.username} approved an update for ${capitalise(data.type)}`);
-	
-				/**
-			{
-				  server_jar: {
-						type: 'paper',
-						version: '1.16.4',
-						build: 352,
-						changes: [
-							[Object]
-						],
-						file: {
-							name: 'paper-1.16.4-352.jar',
-							sha256: '5dd29d4ee032bd3e635e856c61b49b5da86c8feb98d7923f4984059fef374af7'
-						}
-				}
-			}
-			 */
-
 
 			} else { // plugin
-
+				data = data.plugin;
 			}
 
 			// remove this message form the map, it has been approved

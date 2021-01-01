@@ -93,7 +93,7 @@ module.exports = async bot => {
 						build: latest.build,
 						changes: latest.changes,
 						file: latest.downloads.application.name,
-						latest_checksum: latest.downloads.application.sha256,
+						checksum: latest.downloads.application.sha256,
 					}
 				});
 
