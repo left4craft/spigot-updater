@@ -33,7 +33,7 @@ module.exports = async bot => {
 		try {
 			await page.type('#ctrl_pageLogin_login', SPIGOT_EMAIL);
 		} catch (e) {
-			bot.log.error(e);
+			return bot.log.error(e);
 		}
 		await page.keyboard.press('Tab');
 		await page.keyboard.type(SPIGOT_PASSWORD);
@@ -100,7 +100,7 @@ module.exports = async bot => {
 			bot.utils.createEmbed()
 				.setTitle(`🆕 A new version of ${p} is available`)
 				.setDescription('React with ✅ to approve this update and add it to the queue.')
-				.addField('Changelog', `[Updates](https://www.spigotmc.org/resources/${plugins[p].resource}/updates)`)
+				.addField('Changelog', `[View updates on SpigotMC](https://www.spigotmc.org/resources/${plugins[p].resource}/updates)`)
 				.addField('Affected servers', `Servers using this plugin:\n${affected}`)
 				.setFooter(`SpigotMC version ${latest}`)
 		);
