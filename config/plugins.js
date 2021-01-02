@@ -1,6 +1,6 @@
 module.exports = {	
 	Spartan: {
-		source: 'spigot', // spigot | github | direct
+		source: 'spigot', // spigot | github | jenkins | direct
 		url: 'https://www.spigotmc.org/resources/spartan-advanced-anti-cheat-hack-blocker.25638/',
 		jar: 'Spartan.jar'
 	},
@@ -27,7 +27,8 @@ module.exports = {
 	EssentialsX: {
 		source: 'github',
 		repository: 'essentialsx/essentials',
-		asset: /EssentialsX-\S*\.jar/g, // regex for versioned names,
+		// asset: /EssentialsX-\S*\.jar/g, // regex for versioned names
+		asset: 'EssentialsX-{{tag}}.0.jar', // {{tag}} placeholder for github
 		jar: 'EssentialsX.jar'
 	},
 	ProtocolLib: {
@@ -36,4 +37,10 @@ module.exports = {
 		asset: 'ProtocolLib.jar',
 		jar: 'ProtocolLib.jar'
 	},
+	FAWE: {
+		source: 'jenkins',
+		host: 'https://ci.athion.net',
+		job: 'FastAsyncWorldEdit-1.16',
+		artifact: 'FastAsyncWorldEdit-1.16-{{build}}' // {{build}} placeholder for jenkins
+	}
 };
