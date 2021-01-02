@@ -8,6 +8,7 @@ module.exports = {
 			primaryKey: true
 		},
 		current: DataTypes.STRING,
+		latest: DataTypes.STRING,
 		approved: DataTypes.STRING,
 	}
 };

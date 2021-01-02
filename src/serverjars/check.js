@@ -63,44 +63,42 @@ module.exports = async bot => {
 				});
 			}
 
-			if (jar.get('latest_build') !== latest.built) {
+			if (jar.get('latest_build') === latest.built) 
 
 				bot.log.console(`Found an update for ${capitalise(p)} ${v}`);
 
-				jar = await jar.update({
-					latest_version: latest.version,
-					latest_build: latest.built,
-					latest_file: latest.file,
-					latest_checksum: latest.md5,
-				});
+			jar = await jar.update({
+				latest_version: latest.version,
+				latest_build: latest.built,
+				latest_file: latest.file,
+				latest_checksum: latest.md5,
+			});
 
-				let affected = Object.keys(bot.config.servers)
-					.filter(s => bot.config.servers[s].jar.type === p && bot.config.servers[s].jar.version === v)
-					.map(s => `\`${s}\``)
-					.join(', ');
+			let affected = Object.keys(bot.config.servers)
+				.filter(s => bot.config.servers[s].jar.type === p && bot.config.servers[s].jar.version === v)
+				.map(s => `\`${s}\``)
+				.join(', ');
 
-				let msg = await bot.channel.send(
-					// new bot.Embed()
-					bot.utils.createEmbed()
-						.setTitle(`🆕 A new build of ${capitalise(p)} ${latest.version} is available`)
-						.setDescription('React with ✅ to approve this update and add it to the queue.')
-						// .addField('Changelog', 'ServerJars API does not provide a changelog or commit details.')
-						.addField('Affected bot.config.servers', `bot.config.servers using ${capitalise(p)} ${v}:\n${affected}`)
-						.setFooter(`Built at ${new Date(latest.built * 1000).toLocaleString()}`)
-				);
-				msg.react('✅');
-				bot.messages.set(msg.id, {
-					server_jar: {
-						type: p,
-						version: v,
-						actual_version: latest.version,
-						build: latest.built,
-						file: latest.file,
-						checksum: latest.md5,
-					}
-				});
-
-			}
+			let msg = await bot.channel.send(
+				// new bot.Embed()
+				bot.utils.createEmbed()
+					.setTitle(`🆕 A new build of ${capitalise(p)} ${latest.version} is available`)
+					.setDescription('React with ✅ to approve this update and add it to the queue.')
+				// .addField('Changelog', 'ServerJars API does not provide a changelog or commit details.')
+					.addField('Affected servers', `Servers using ${capitalise(p)} ${v}:\n${affected}`)
+					.setFooter(`Built at ${new Date(latest.built * 1000).toLocaleString()}`)
+			);
+			msg.react('✅');
+			bot.messages.set(msg.id, {
+				server_jar: {
+					type: p,
+					version: v,
+					actual_version: latest.version,
+					build: latest.built,
+					file: latest.file,
+					checksum: latest.md5,
+				}
+			});
 
 		}
 	}

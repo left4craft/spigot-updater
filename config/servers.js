@@ -10,7 +10,7 @@ module.exports = {
 		max_players: 1,
 		plugins_dir: '/plugins/',
 		plugins: [
-			'btlp_bungee',
+			'BTLP_Bungee',
 		]
 	},
 	hub: {
@@ -24,8 +24,8 @@ module.exports = {
 		max_players: 1,
 		plugins_dir: '/plugins/',
 		plugins: [
-			'btlp_bukkit',
-			'spartan',
+			'BTLP_Bukkit',
+			'Spartan',
 		]
 	},
 	survival: {
@@ -39,8 +39,8 @@ module.exports = {
 		max_players: 1,
 		plugins_dir: '/plugins/',
 		plugins: [
-			'btlp_bukkit',
-			'spartan',
+			'BTLP_Bukkit',
+			'Spartan',
 		]
 	},
 	creative: {
@@ -54,8 +54,8 @@ module.exports = {
 		max_players: 1,
 		plugins_dir: '/plugins/',
 		plugins: [
-			'btlp_bukkit',
-			'spartan',
+			'BTLP_Bukkit',
+			'Spartan',
 		]
 	},
 	partygames: {
@@ -69,8 +69,8 @@ module.exports = {
 		max_players: 1,
 		plugins_dir: '/plugins/',
 		plugins: [
-			'btlp_bukkit',
-			'spartan',
+			'BTLP_Bukkit',
+			'Spartan',
 		]
 	},
 	build: {
@@ -84,8 +84,8 @@ module.exports = {
 		max_players: 1,
 		plugins_dir: '/plugins/',
 		plugins: [
-			'btlp_bukkit',
-			'spartan',
+			'BTLP_Bukkit',
+			'Spartan',
 		]
 	}
 };

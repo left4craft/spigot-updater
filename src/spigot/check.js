@@ -17,47 +17,103 @@ module.exports = async bot => {
 	});
 
 	const page = await browser.newPage();
-	await page._client.send('Page.setDownloadBehavior', {
-		behavior: 'allow',
-		downloadPath: './data/downloads'
-	});
 
-	bot.log.console('Loading page (waiting for Cloudflare)');
+	bot.log.console('Loading spigotmc.org (waiting for Cloudflare)');
 	await page.goto('https://www.spigotmc.org/login');
 	await page.waitForTimeout(10000);
 	// await page.waitForNavigation();
 	await page.screenshot({ path: 'loaded.png', fullPage: true });
-	bot.log.console('Logging into SpigotMC');
-	await page.type('#ctrl_pageLogin_login', process.env.SPIGOT_EMAIL);
-	await page.keyboard.press('Tab');
-	await page.keyboard.type(process.env.SPIGOT_PASSWORD);
-	await page.keyboard.press('Tab');
-	await page.keyboard.press('Enter');
-	await page.waitForNavigation();
-	await page.screenshot({ path: 'authenticated.png', fullPage: true });
+
+	const {
+		SPIGOT_EMAIL,
+		SPIGOT_PASSWORD
+	} = process.env;
+	if (SPIGOT_EMAIL && SPIGOT_PASSWORD) {
+		bot.log.console('Logging into SpigotMC');
+		try {
+			await page.type('#ctrl_pageLogin_login', SPIGOT_EMAIL);
+		} catch (e) {
+			bot.log.error(e);
+		}
+		await page.keyboard.press('Tab');
+		await page.keyboard.type(SPIGOT_PASSWORD);
+		await page.keyboard.press('Tab');
+		await page.keyboard.press('Enter');
+		await page.waitForNavigation();
+		await page.screenshot({ path: 'authenticated.png', fullPage: true });
+	} else {
+		bot.log.console('Skipping authentication');
+	}
+	
 
 	let plugins = {};
 	Object.keys(bot.config.plugins)
 		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'spigot')
 		.forEach(plugin => plugins[plugin] = bot.config.plugins[plugin]);
 		
-	for (const plugin in plugins) {
-		await page.goto(`https://www.spigotmc.org/resources/${plugins[plugin].resource}/updates`);
-		
-		let version;
+	for (const p in plugins) {
+		await page.goto(`https://www.spigotmc.org/resources/${plugins[p].resource}/updates`);
+
+		let latest;
 		try {	
 			// eslint-disable-next-line no-undef
 			const url = await page.evaluate(() => document.querySelector('.downloadButton > a').href);
-			version = (new URL(url)).searchParams.get('version');
-			if (!version) {
-				bot.log.warn(`Couldn't find a version number for ${plugin}`);
+			latest = (new URL(url)).searchParams.get('version');
+			if (!latest) {
+				bot.log.warn(`Couldn't find a version number for ${p}`);
 				continue;
 			}
 		} catch (e) {
 			bot.log.error(e);
 		}
-		
-	}	
 
-	// await browser.close();	
+		let plugin = await bot.db.Plugins.findOne({
+			where: {
+				name: p
+			}
+		});
+
+		if (!plugin) {
+			plugin = await bot.db.Plugins.create({
+				name: p
+			});
+		}
+
+		if (plugin.get('latest') === latest) continue;
+
+		// there is a new version
+
+		bot.log.console(`Found an update for '${plugins[p].jar}'`);
+
+		await plugin.update({
+			latest: latest,
+		});
+
+		let affected = Object.keys(bot.config.servers)
+			.filter(s => bot.config.servers[s].plugins.includes(p))
+			.map(s => `\`${s}\``)
+			.join(', ');
+
+
+		let msg = await bot.channel.send(
+			// new bot.Embed()
+			bot.utils.createEmbed()
+				.setTitle(`🆕 A new version of ${p} is available`)
+				.setDescription('React with ✅ to approve this update and add it to the queue.')
+				.addField('Changelog', `[Updates](https://www.spigotmc.org/resources/${plugins[p].resource}/updates)`)
+				.addField('Affected servers', `Servers using this plugin:\n${affected}`)
+				.setFooter(`SpigotMC version ${latest}`)
+		);
+		msg.react('✅');
+		bot.messages.set(msg.id, {
+			plugin: {
+				name: p,
+				latest: latest,
+			}
+		});	
+		
+	}
+
+	bot.log.console('Closing browser');
+	await browser.close();	
 };

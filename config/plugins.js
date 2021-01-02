@@ -44,6 +44,7 @@ module.exports = {
 		source: 'jenkins',
 		host: 'https://ci.athion.net',
 		job: 'FastAsyncWorldEdit-1.16',
-		artifact: 'FastAsyncWorldEdit-1.16-{{build}}.jar' // {{build}} placeholder for jenkins
+		artifact: 'FastAsyncWorldEdit-1.16-{{build}}.jar', // {{build}} placeholder for jenkins
+		jar: 'FastAsyncWorldEdit.jar'
 	}
 };
