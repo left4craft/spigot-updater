@@ -2,15 +2,14 @@ const minecraft = require('minecraft-server-util');
 const fetch = require('node-fetch');
 
 const config = require('../../config/config');
-const servers = require('../../config/servers');
 
 module.exports = {
 	getPlayerCount(bot, server) {
 		return new Promise((resolve, reject) => {
 
-			if (servers[server].host) {
+			if (bot.config.servers[server].host) {
 
-				let host = servers[server].host.split(':'),
+				let host = bot.config.servers[server].host.split(':'),
 					ip = host[0],
 					port = Number(host[1]);
 
@@ -24,7 +23,7 @@ module.exports = {
 					resolve(0);
 				});
 
-			} else if (servers[server].left4status && config.left4status.length > 1) {
+			} else if (bot.config.servers[server].left4status && config.left4status.length > 1) {
 
 				let host = config.left4status;
 				if (host[host.length - 1] !== '/') host += '/';

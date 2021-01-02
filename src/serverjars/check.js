@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-const servers = require('../../config/servers');
 
 const { capitalise } = require('../utils');
 
@@ -16,21 +15,21 @@ module.exports = async bot => {
 				valid.push(n);
 			}	
 		}
-		for (let s in servers) {
-			let type = servers[s].jar.type;
+		for (let s in bot.config.servers) {
+			let type = bot.config.servers[s].jar.type;
 			if (!valid.includes(type))
 				bot.log.warn(`${s} server has an unsupported jar type: '${type}'`);
 		}
 	}
 
 	// get an array of server jar types and make a Set to reduce the number of API calls
-	let projects = new Set(Object.keys(servers).map(s => servers[s].jar.type));
+	let projects = new Set(Object.keys(bot.config.servers).map(s => bot.config.servers[s].jar.type));
 	for (let p of projects) {
 		// versions of each project
 		let versions = new Set(
-			Object.keys(servers)
-				.filter(s => servers[s].jar.type === p)
-				.map(s => servers[s].jar.version)
+			Object.keys(bot.config.servers)
+				.filter(s => bot.config.servers[s].jar.type === p)
+				.map(s => bot.config.servers[s].jar.version)
 		);
 
 		for (let v of versions) {
@@ -75,8 +74,8 @@ module.exports = async bot => {
 					latest_checksum: latest.md5,
 				});
 
-				let affected = Object.keys(servers)
-					.filter(s => servers[s].jar.type === p && servers[s].jar.version === v)
+				let affected = Object.keys(bot.config.servers)
+					.filter(s => bot.config.servers[s].jar.type === p && bot.config.servers[s].jar.version === v)
 					.map(s => `\`${s}\``)
 					.join(', ');
 
@@ -86,7 +85,7 @@ module.exports = async bot => {
 						.setTitle(`🆕 A new build of ${capitalise(p)} ${latest.version} is available`)
 						.setDescription('React with ✅ to approve this update and add it to the queue.')
 						// .addField('Changelog', 'ServerJars API does not provide a changelog or commit details.')
-						.addField('Affected servers', `Servers using ${capitalise(p)} ${v}:\n${affected}`)
+						.addField('Affected bot.config.servers', `bot.config.servers using ${capitalise(p)} ${v}:\n${affected}`)
 						.setFooter(`Built at ${new Date(latest.built * 1000).toLocaleString()}`)
 				);
 				msg.react('✅');

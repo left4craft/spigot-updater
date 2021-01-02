@@ -23,9 +23,13 @@ fs.readdir(path('data/'), (err, items) => {
 	for (let d of directories) {
 		if (!items.includes(d)) {
 			fs.mkdirSync(path('data/' + d));
-			this.log.console(`${capitalise(d)} directory not found, creating it for you...`);
+			log.console(`${capitalise(d)} directory not found, creating it for you...`);
 		}
-	}		
+	}	
+	log.console('Clearing downloads directory');
+	for (const file of fs.readdirSync(path('data/downloads/'))) {
+		fs.unlinkSync(path('data/downloads/' + file));
+	}	
 });
 
 const { Client: DiscordClient } = require('discord.js');
@@ -40,7 +44,10 @@ class Bot extends DiscordClient {
 		this.utils.init(this);
 
 		Object.assign(this, {
-			config,
+			config: Object.assign(config, {
+				servers: require('../config/servers'),
+				plugins: require('../config/plugins'),
+			}),
 			db: require('./database')(log),
 			Embed: this.utils.Embed,
 			log,

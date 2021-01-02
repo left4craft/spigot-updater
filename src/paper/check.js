@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-const servers = require('../../config/servers');
 
 module.exports = async bot => {
 
@@ -8,8 +7,8 @@ module.exports = async bot => {
 	// this is just a warning, you'll probably get an error a few seconds later
 	let { projects: valid } = (await (await fetch(API)).json());
 	if (valid instanceof Array) { // if there isn't an error above
-		for (let s in servers) {
-			let type = servers[s].jar.type;
+		for (let s in bot.config.servers) {
+			let type = bot.config.servers[s].jar.type;
 			if (!valid.includes(type))
 				bot.log.warn(`${s} server has an unsupported jar type: '${type}'.
 			Supported jar types for PaperMC API: ${valid.join(', ')}.
@@ -18,13 +17,13 @@ module.exports = async bot => {
 	}
 	
 	// get an array of server jar types and make a Set to reduce the number of API calls
-	let projects = new Set(Object.keys(servers).map(s => servers[s].jar.type));
+	let projects = new Set(Object.keys(bot.config.servers).map(s => bot.config.servers[s].jar.type));
 	for (let p of projects) {
 		// versions of each project
 		let versions = new Set(
-			Object.keys(servers)
-				.filter(s => servers[s].jar.type === p)
-				.map(s => servers[s].jar.version)
+			Object.keys(bot.config.servers)
+				.filter(s => bot.config.servers[s].jar.type === p)
+				.map(s => bot.config.servers[s].jar.version)
 		);
 
 		for (let v of versions) {
@@ -66,8 +65,8 @@ module.exports = async bot => {
 					latest_checksum: latest.downloads.application.sha256,
 				});
 
-				let affected = Object.keys(servers)
-					.filter(s => servers[s].jar.type === p && servers[s].jar.version === v)
+				let affected = Object.keys(bot.config.servers)
+					.filter(s => bot.config.servers[s].jar.type === p && bot.config.servers[s].jar.version === v)
 					.map(s => `\`${s}\``)
 					.join(', ');
 				let changes = latest.changes
@@ -81,7 +80,7 @@ module.exports = async bot => {
 						.setTitle(`🆕 A new build of ${data.project_name} ${latest.version} is available`)
 						.setDescription('React with ✅ to approve this update and add it to the queue.')
 						.addField('Changelog', 'Click commit summaries for more details.\n' + changes)
-						.addField('Affected servers', `Servers using ${data.project_name} ${v}:\n${affected}`)
+						.addField('Affected bot.config.servers', `bot.config.servers using ${data.project_name} ${v}:\n${affected}`)
 						.setFooter(`Build ${latest.build}`)
 				);
 				msg.react('✅');
