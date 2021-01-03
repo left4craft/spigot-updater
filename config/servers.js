@@ -1,5 +1,5 @@
 module.exports = {
-	bungee: {
+	Bungee: {
 		host: 'mc.left4craft.org:25565', // direct query
 		// left4status: 'proxy', // get from left4status
 		jar: {
@@ -13,7 +13,7 @@ module.exports = {
 			'BTLP_Bungee',
 		]
 	},
-	hub: {
+	Hub: {
 		// host: 'mc.left4craft.org:25566',
 		left4status: 'hub',
 		jar: {
@@ -30,7 +30,7 @@ module.exports = {
 			'Spartan',
 		]
 	},
-	survival: {
+	Survival: {
 		// host: 'mc.left4craft.org:25567',
 		left4status: 'survival',
 		jar: {
@@ -47,7 +47,7 @@ module.exports = {
 			'Spartan',
 		]
 	},
-	creative: {
+	Creative: {
 		// host: 'mc.left4craft.org:25568',
 		left4status: 'creative',
 		jar: {
@@ -64,7 +64,7 @@ module.exports = {
 			'Spartan',
 		]
 	},
-	partygames: {
+	PartyGames: {
 		// host: 'mc.left4craft.org:25569',
 		left4status: 'partygames',
 		jar: {
@@ -81,7 +81,7 @@ module.exports = {
 			'Spartan',
 		]
 	},
-	build: {
+	Build: {
 		// host: 'mc.left4craft.org:25570',
 		left4status: 'build',
 		jar: {

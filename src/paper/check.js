@@ -51,20 +51,6 @@ module.exports = async bot => {
 
 			bot.log.console(`Found an update for ${data.project_name} ${v} (${jar.get('latest_build') || 0} -> ${latest.build})`);
 
-			/* jar.set('latest_version', latest.version); 
-				jar.set('latest_build', latest.build); 
-				jar.set('latest_changes', JSON.stringify(latest.changes)); 
-				jar.set('latest_file', latest.downloads.application.name); 
-				jar.save(); */
-
-			jar = await jar.update({
-				latest_version: latest.version,
-				latest_build: latest.build,
-				latest_changes: JSON.stringify(latest.changes),
-				latest_file: latest.downloads.application.name,
-				latest_checksum: latest.downloads.application.sha256,
-			});
-
 			let affected = Object.keys(bot.config.servers)
 				.filter(s => bot.config.servers[s].jar.type === p && bot.config.servers[s].jar.version === v)
 				.map(s => `\`${s}\``)
@@ -95,6 +81,20 @@ module.exports = async bot => {
 					checksum: latest.downloads.application.sha256,
 				}
 			});	
+
+			/* jar.set('latest_version', latest.version); 
+				jar.set('latest_build', latest.build); 
+				jar.set('latest_changes', JSON.stringify(latest.changes)); 
+				jar.set('latest_file', latest.downloads.application.name); 
+				jar.save(); */
+
+			jar = await jar.update({
+				latest_version: latest.version,
+				latest_build: latest.build,
+				latest_changes: JSON.stringify(latest.changes),
+				latest_file: latest.downloads.application.name,
+				latest_checksum: latest.downloads.application.sha256,
+			});
 			
 		}
 	}

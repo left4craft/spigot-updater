@@ -30,7 +30,7 @@ module.exports = {
 				fetch(host + 'api/status/minecraft')
 					.then(res => res.json())
 					.then(json => {
-						let data = json.services[server];
+						let data = json.services[bot.config.servers[server].left4status];
 						if (!data) {
 							bot.log.warn(`${server} does not exist in the response from Left4Status`);
 							return resolve(0);
