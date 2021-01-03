@@ -38,18 +38,20 @@ module.exports = async bot => {
 			const get = async  () => {
 				fs.writeFileSync(file, await download(url));
 				bot.log.console(`Downloaded ${capitalise(p)} ${v} (${build}): servers/${jar.get('id')}.jar`);
-				return await hasha.fromFile(file, { algorithm: 'sha256' });
+				return hasha.fromFile(file, { algorithm: 'sha256' });
 			};
 			
 			try {
-				if (get() !== jar.get('approved_checksum')) {
+				if (await get() !== jar.get('approved_checksum')) {
 					bot.log.warn(`Checksum did not match for ${capitalise(p)} ${v}, trying again`);
-					if (get() !== jar.get('approved_checksum')) {
-						throw new Error('Invalid checksum');
+					if (await get() !== jar.get('approved_checksum')) {
+						fs.rmSync(file);
+						throw new Error('Invalid checksum, deleting file.');
 					}
 				}
 			} catch (e) {
-				return bot.log.error(e);
+				bot.log.error(e);
+				continue;
 			}
 
 			jar = await jar.update({

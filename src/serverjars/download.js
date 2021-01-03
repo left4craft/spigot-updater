@@ -52,18 +52,19 @@ module.exports = async bot => {
 			const get = async () => {
 				fs.writeFileSync(file, await download(url));
 				bot.log.console(`Downloaded ${capitalise(p)} ${v} (${build}): servers/${jar.get('id')}.jar`);
-				return await hasha.fromFile(file, { algorithm: 'md5' });
+				return hasha.fromFile(file, { algorithm: 'md5' });
 			};
 
 			try {
-				if (get() !== latest.md5) {
+				if (await get() !== latest.md5) {
 					bot.log.warn(`Checksum did not match for ${capitalise(p)} ${v}, trying again`);
-					if (get() !== latest.md5) {
+					if (await get() !== latest.md5) {
 						throw new Error('Invalid checksum');
 					}
 				}
 			} catch (e) {
-				return bot.log.error(e);
+				bot.log.error(e);
+				continue;
 			}
 
 			jar = await jar.update({
