@@ -25,6 +25,8 @@ module.exports = {
 		plugins_dir: '/plugins/',
 		plugins: [
 			'BTLP_Bukkit',
+			'EssentialsX',
+			'Left4Chat',
 			'Spartan',
 		]
 	},
@@ -40,6 +42,8 @@ module.exports = {
 		plugins_dir: '/plugins/',
 		plugins: [
 			'BTLP_Bukkit',
+			'EssentialsX',
+			'Left4Chat',
 			'Spartan',
 		]
 	},
@@ -55,6 +59,8 @@ module.exports = {
 		plugins_dir: '/plugins/',
 		plugins: [
 			'BTLP_Bukkit',
+			'EssentialsX',
+			'Left4Chat',
 			'Spartan',
 		]
 	},
@@ -70,6 +76,8 @@ module.exports = {
 		plugins_dir: '/plugins/',
 		plugins: [
 			'BTLP_Bukkit',
+			'EssentialsX',
+			'Left4Chat',
 			'Spartan',
 		]
 	},
@@ -85,6 +93,8 @@ module.exports = {
 		plugins_dir: '/plugins/',
 		plugins: [
 			'BTLP_Bukkit',
+			'EssentialsX',
+			'Left4Chat',
 			'Spartan',
 		]
 	}
