@@ -98,6 +98,7 @@ module.exports = async bot => {
 		let msg = await bot.channel.send(
 			// new bot.Embed()
 			bot.utils.createEmbed()
+				.setColor('ORANGE')
 				.setTitle(`🆕 A new version of ${p} is available`)
 				.setDescription('React with ✅ to approve this update and add it to the queue.')
 				.addField('Changelog', `[View updates on SpigotMC](https://www.spigotmc.org/resources/${plugins[p].resource}/updates)`)

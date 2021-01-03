@@ -21,6 +21,11 @@ module.exports = {
 		zip_path: /BungeeTabListPlus_BukkitBridge-\S*\.jar/g, // regex for versioned names
 		jar: 'BTLP-Bukkit.jar'
 	},
+	Companies: {
+		source: 'spigot',
+		resource: 16712,
+		jar: 'Companies.jar'
+	},
 	Left4Chat: {
 		source: 'github',
 		repository: 'left4craft/left4chat',

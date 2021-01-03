@@ -19,17 +19,13 @@ const log = new Logger({
 });
 
 fs.readdir(path('data/'), (err, items) => {
-	let directories = ['servers', 'plugins'];
+	let directories = ['temp', 'servers', 'plugins'];
 	for (let d of directories) {
 		if (!items.includes(d)) {
 			fs.mkdirSync(path('data/' + d));
 			log.console(`${capitalise(d)} directory not found, creating it for you...`);
 		}
 	}	
-	/* log.console('Clearing downloads directory');
-	for (const file of fs.readdirSync(path('data/downloads/'))) {
-		fs.unlinkSync(path('data/downloads/' + file));
-	} */	
 });
 
 const { Client: DiscordClient } = require('discord.js');
@@ -108,6 +104,7 @@ class Bot extends DiscordClient {
 				await m.edit(
 					this.utils.createEmbed(m.embeds[0])
 					// this.utils.createEmbed()
+						.setColor('DARK_GREEN')
 						.setTitle(`✅ Update approved for ${capitalise(data.type)} ${data.version}`)
 						.setDescription(`Approved by ${u}.\nThis will be updated during the next upload task.`)
 				);
@@ -131,6 +128,7 @@ class Bot extends DiscordClient {
 				await m.edit(
 					this.utils.createEmbed(m.embeds[0])
 					// this.utils.createEmbed()
+						.setColor('DARK_GREEN')
 						.setTitle(`✅ Update approved for ${data.name}`)
 						.setDescription(`Approved by ${u}.\nThis will be updated during the next upload task.`)
 				);

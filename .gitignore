@@ -2,7 +2,7 @@ node_modules
 logs
 data/servers.json
 data/plugins.json
-data/downloads
+data/temp
 data/plugins
 data/servers
 .env
