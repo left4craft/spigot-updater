@@ -68,7 +68,11 @@ module.exports = async bot => {
 		await page.keyboard.type(SPIGOT_PASSWORD);
 		await page.keyboard.press('Tab');
 		await page.keyboard.press('Enter');
-		await page.waitForNavigation();
+		try {
+			await page.waitForNavigation();
+		} catch (e) {
+			bot.log.error(e);
+		}
 		await page.screenshot({ path: 'authenticated.png', fullPage: true });
 	} else {
 		bot.log.console('Skipping authentication');
