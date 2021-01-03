@@ -47,7 +47,7 @@ module.exports = async bot => {
 				});
 			}
 
-			if (jar.get('latest_build') === latest.build) continue;
+			if (jar.get('latest_build') == latest.build) continue;
 
 			bot.log.console(`Found an update for ${data.project_name} ${v} (${jar.get('latest_build') || 0} -> ${latest.build})`);
 

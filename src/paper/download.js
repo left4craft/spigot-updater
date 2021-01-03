@@ -25,6 +25,7 @@ module.exports = async bot => {
 				}
 			});
 			if (!jar) continue;
+			if (jar.get('downloaded') === jar.get('approved_build')) continue;
 
 			let version = jar.get('approved_version'),
 				build = jar.get('approved_build'),

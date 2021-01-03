@@ -9,7 +9,7 @@ module.exports = {
 		},
 		type: DataTypes.STRING,
 		version: DataTypes.STRING,
-		downloaded: DataTypes.STRING,
+		downloaded: DataTypes.INTEGER,
 		approved_version: DataTypes.STRING,
 		approved_build: DataTypes.INTEGER, // build number (papermc) or build time (serverjars)
 		approved_changes: DataTypes.TEXT, // string to be parsed as JSON: [Object]
