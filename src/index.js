@@ -19,17 +19,17 @@ const log = new Logger({
 });
 
 fs.readdir(path('data/'), (err, items) => {
-	let directories = ['downloads', 'plugins'];
+	let directories = ['servers', 'plugins'];
 	for (let d of directories) {
 		if (!items.includes(d)) {
 			fs.mkdirSync(path('data/' + d));
 			log.console(`${capitalise(d)} directory not found, creating it for you...`);
 		}
 	}	
-	log.console('Clearing downloads directory');
+	/* log.console('Clearing downloads directory');
 	for (const file of fs.readdirSync(path('data/downloads/'))) {
 		fs.unlinkSync(path('data/downloads/' + file));
-	}	
+	} */	
 });
 
 const { Client: DiscordClient } = require('discord.js');
@@ -95,20 +95,20 @@ class Bot extends DiscordClient {
 				});
 
 				await jar.update({
-					approved_version: data.version,
+					approved_version: data.actual_version,
 					approved_build: data.build,
 					approved_file: data.file,
 					approved_checksum: data.checksum,
 				});
 
-				this.log.console(`${u.username} approved an update for ${capitalise(data.type)}`);
+				this.log.console(`${u.username} approved an update for ${capitalise(data.type)} ${data.version}`);
 
 				await m.reactions.removeAll();
 
 				await m.edit(
 					this.utils.createEmbed(m.embeds[0])
 					// this.utils.createEmbed()
-						.setTitle(`✅ Update approved for ${data.type} ${data.version}`)
+						.setTitle(`✅ Update approved for ${capitalise(data.type)} ${data.version}`)
 						.setDescription(`Approved by ${u}.\nThis will be updated during the next upload task.`)
 				);
 

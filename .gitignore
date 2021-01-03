@@ -4,5 +4,6 @@ data/servers.json
 data/plugins.json
 data/downloads
 data/plugins
+data/servers
 .env
 /*.png
