@@ -1,5 +1,7 @@
 const download = require('download');
+const fetch = require('node-fetch');
 const fs = require('fs');
+const hasha = require('hasha');
 
 const { capitalise } = require('../utils');
 const { path } = require('../utils/fs');
@@ -28,19 +30,38 @@ module.exports = async bot => {
 			if (!jar) continue;
 			if (jar.get('downloaded') === jar.get('approved_build')) continue;
 
-			let build = jar.get('approved_build');
+			let build = jar.get('approved_build'),
+				file = path(`data/servers/${jar.get('id')}.jar`);
 
-			let url;
+			let data, latest, url;
 
 			if (v === 'latest') {
+				data = (await (await fetch(`${API}/fetchLatest/${p}`)).json()).response;
+				latest = data;
 				url = `${API}/fetchJar/${p}`;
 			} else {
+				data = (await (await fetch(`${API}/fetchAll/${p}`)).json()).response;
+				latest = data.find(ver => ver.version === v);
 				url = `${API}/fetchJar/${p}/${v}`;
+
+				let supported = data.map(ver => ver.version);
+				if (!latest)
+					bot.log.warn(`Couldn't find a build for ${capitalise(p)} ${v}.\nVersions: ${supported.join(', ')}`);
 			}
 
+			const get = async () => {
+				fs.writeFileSync(file, await download(url));
+				bot.log.console(`Downloaded ${capitalise(p)} ${v} (${build}): servers/${jar.get('id')}.jar`);
+				return await hasha.fromFile(file, { algorithm: 'md5' });
+			};
+
 			try {
-				fs.writeFileSync(path(`data/servers/${jar.get('id')}.jar`),
-					await download(url));
+				if (get() !== latest.md5) {
+					bot.log.warn(`Checksum did not match for ${capitalise(p)} ${v}, trying again`);
+					if (get() !== latest.md5) {
+						throw new Error('Invalid checksum');
+					}
+				}
 			} catch (e) {
 				return bot.log.error(e);
 			}

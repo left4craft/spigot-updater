@@ -1,5 +1,6 @@
 const download = require('download');
 const fs = require('fs');
+const hasha = require('hasha');
 
 const { capitalise } = require('../utils');
 const { path } = require('../utils/fs');
@@ -29,11 +30,24 @@ module.exports = async bot => {
 
 			let version = jar.get('approved_version'),
 				build = jar.get('approved_build'),
-				file = jar.get('approved_file');
+				fileName = jar.get('approved_file');
+			
+			let file = path(`data/servers/${jar.get('id')}.jar`),
+				url = `${API}/${p}/versions/${version}/builds/${build}/downloads/${fileName}`;
+			
+			const get = async  () => {
+				fs.writeFileSync(file, await download(url));
+				bot.log.console(`Downloaded ${capitalise(p)} ${v} (${build}): servers/${jar.get('id')}.jar`);
+				return await hasha.fromFile(file, { algorithm: 'sha256' });
+			};
 			
 			try {
-				fs.writeFileSync(path(`data/servers/${jar.get('id')}.jar`),
-					await download(`${API}/${p}/versions/${version}/builds/${build}/downloads/${file}`));
+				if (get() !== jar.get('approved_checksum')) {
+					bot.log.warn(`Checksum did not match for ${capitalise(p)} ${v}, trying again`);
+					if (get() !== jar.get('approved_checksum')) {
+						throw new Error('Invalid checksum');
+					}
+				}
 			} catch (e) {
 				return bot.log.error(e);
 			}
@@ -41,8 +55,7 @@ module.exports = async bot => {
 			jar = await jar.update({
 				downloaded: build
 			});
-
-			bot.log.console(`Downloaded ${capitalise(p)} ${v} (${build}): servers/${jar.get('id')}.jar`);
+		
 		}
 	}
 };

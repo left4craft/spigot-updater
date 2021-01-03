@@ -8,6 +8,7 @@
 		"discord.js": "^12.5.1",
 		"dotenv": "^8.2.0",
 		"download": "^8.0.0",
+		"hasha": "^5.2.2",
 		"leekslazylogger": "^2.0.7",
 		"minecraft-server-util": "^3.4.2",
 		"mysql2": "^2.2.5",
