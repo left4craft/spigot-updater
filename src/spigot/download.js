@@ -76,6 +76,9 @@ module.exports = async bot => {
 
 	for (const p in plugins) {
 
+		if (fs.existsSync(path(`data/plugins/${plugins[p].jar}`)))
+			fs.unlinkSync(path(`data/plugins/${plugins[p].jar}`));
+
 		let plugin = await bot.db.Plugins.findOne({
 			where: {
 				name: p
@@ -115,7 +118,6 @@ module.exports = async bot => {
 				path(`data/temp/${file}`),
 				path(`data/plugins/${plugins[p].jar}`)
 			);
-			// fs.rm
 			fs.unlinkSync(path(`data/temp/${file}`));
 		} else {
 			fs.renameSync(path(`data/temp/${file}`), path(`data/plugins/${plugins[p].jar}`));

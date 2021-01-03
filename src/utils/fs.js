@@ -4,7 +4,7 @@ const unzipper = require('unzipper');
 
 module.exports = {
 	path: path => join(__dirname, '../../', path),
-	unzip: async (file, zip, output) => new Promise(resolve => {
+	unzip: (file, zip, output) => new Promise(resolve => {
 		fs.createReadStream(zip)
 			.pipe(unzipper.Parse())
 			.on('entry', entry => {
