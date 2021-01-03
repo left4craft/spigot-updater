@@ -50,7 +50,7 @@ module.exports = async bot => {
 			}
 			asset = item.name;
 		} else {
-			asset = plugins[p].asset;
+			asset = plugins[p].asset.replace(/{{ ? tag ? }}/gi, tag);
 		}
 		
 		let url = `https://github.com/${plugins[p].repository}/releases/download/${tag}/${asset}`;
