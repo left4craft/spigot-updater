@@ -57,7 +57,7 @@ module.exports = async bot => {
 		bot.messages.set(msg.id, {
 			plugin: {
 				name: p,
-				latest: data.tag_name,
+				version: data.tag_name,
 			}
 		});	
 	}

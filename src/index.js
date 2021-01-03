@@ -76,10 +76,13 @@ class Bot extends DiscordClient {
 		});
 
 		this.on('messageReactionAdd', async (r, u) => {
-			if (u.id === this.user.id) return;
-			if (r.emoji.name !== '✅' || r.message.channel.id !== this.config.channel_id) return;
+			let m = r.message;
+			if (m.partial) m = await m.fetch();
 
-			let data = this.messages.get(r.message.id);
+			if (u.id === this.user.id) return;
+			if (r.emoji.name !== '✅' || m.channel.id !== this.config.channel_id) return;
+
+			let data = this.messages.get(m.id);
 			if (!data) return;
 
 			if (data.server_jar) { // server jar
@@ -100,12 +103,41 @@ class Bot extends DiscordClient {
 
 				this.log.console(`${u.username} approved an update for ${capitalise(data.type)}`);
 
+				await m.reactions.removeAll();
+
+				await m.edit(
+					this.utils.createEmbed(m.embeds[0])
+					// this.utils.createEmbed()
+						.setTitle(`✅ Update approved for ${data.type} ${data.version}`)
+						.setDescription(`Approved by ${u}.\nThis will be updated during the next upload task.`)
+				);
+
 			} else { // plugin
 				data = data.plugin;
+				let jar = await this.db.Plugins.findOne({
+					where: {
+						name: data.name
+					}
+				});
+
+				await jar.update({
+					approved: data.version,
+				});
+
+				this.log.console(`${u.username} approved an update for ${data.name}`);
+
+				await m.reactions.removeAll();
+
+				await m.edit(
+					this.utils.createEmbed(m.embeds[0])
+					// this.utils.createEmbed()
+						.setTitle(`✅ Update approved for ${data.name}`)
+						.setDescription(`Approved by ${u}.\nThis will be updated during the next upload task.`)
+				);
 			}
 
 			// remove this message form the map, it has been approved
-			this.messages.delete(r.message.id);
+			this.messages.delete(m.id);
 		});
 
 		this.login();
@@ -116,6 +148,6 @@ new Bot();
 
 process.on('unhandledRejection', error => {
 	log.warn('An error was not caught');
-	if (error instanceof Error) log.warn(`Uncaught ${error.name}: ${error.message}`);
+	if (error instanceof Error) log.warn(`Uncaught ${error.name}: ${error}`);
 	log.error(error);
 });
