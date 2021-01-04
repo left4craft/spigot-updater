@@ -1,7 +1,13 @@
-const panel = require('../pterodactyl');
+const Panel = require('../pterodactyl');
 const { getPlayerCount } = require('../utils/minecraft');
 
 module.exports = async (bot) => {
+
+	const {
+		PTERO_HOST,
+		PTERO_CLIENT_KEY
+	} = process.env;
+	const panel = new Panel(PTERO_HOST, PTERO_CLIENT_KEY);
 
 	for (let server in bot.config.servers) {
 
