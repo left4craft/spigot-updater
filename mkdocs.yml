@@ -1,0 +1,76 @@
+# Project information
+site_name: Spigot updater
+site_description: An automated update system for Minecraft servers and their plugins using Pterodactyl.
+site_author: Left4Craft
+site_url: https://left4craft.github.io/spigot-updater
+
+# Repository
+repo_name: left4craft/spigot-updater
+repo_url: https://github.com/left4craft/spigot-updater
+
+# Copyright
+copyright: '&copy; 2020 Left4Craft'
+
+# Configuration
+theme:
+  name: material
+  # custom_dir: overrides/
+  language: en
+  palette:
+    scheme: slate
+    primary: green
+    accent: green
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - instant
+  logo: /img/logo.png
+  favicon: /img/favicon.ico
+
+# Extras
+extra:
+  social:
+    - icon: fontawesome/solid/home
+      link: https://www.left4craft.org
+    - icon: fontawesome/brands/github-alt
+      link: https://github.com/left4craft
+
+# Google Analytics
+#google_analytics:
+#  - UA-XXXXXXXX-X
+#  - auto
+
+plugins:
+  - search # necessary for search to work
+  - git-revision-date-localized # last modified date at bottom of page
+  - awesome-pages # custom nav order
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+  - footnotes
+  - meta
+# pymd
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tabbed
+  - pymdownx.tilde
