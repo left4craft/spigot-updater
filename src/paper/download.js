@@ -25,6 +25,7 @@ module.exports = async bot => {
 					version: v
 				}
 			});
+
 			if (!jar) continue;
 			if (jar.get('downloaded') === jar.get('approved_build')) continue;
 
@@ -36,6 +37,8 @@ module.exports = async bot => {
 				url = `${API}/${p}/versions/${version}/builds/${build}/downloads/${fileName}`;
 			
 			const get = async  () => {
+				if (fs.existsSync(file))
+					fs.unlinkSync(file);
 				fs.writeFileSync(file, await download(url));
 				bot.log.console(`Downloaded ${capitalise(p)} ${v} (${build}): servers/${jar.get('id')}.jar`);
 				return hasha.fromFile(file, { algorithm: 'sha256' });

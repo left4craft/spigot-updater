@@ -80,9 +80,6 @@ module.exports = async bot => {
 
 	for (const p in plugins) {
 
-		if (fs.existsSync(path(`data/plugins/${plugins[p].jar}`)))
-			fs.unlinkSync(path(`data/plugins/${plugins[p].jar}`));
-
 		let plugin = await bot.db.Plugins.findOne({
 			where: {
 				name: p
@@ -91,6 +88,9 @@ module.exports = async bot => {
 
 		if (!plugin) continue;
 		if (plugin.get('downloaded') === plugin.get('approved')) continue;
+
+		if (fs.existsSync(path(`data/plugins/${plugins[p].jar}`)))
+			fs.unlinkSync(path(`data/plugins/${plugins[p].jar}`));
 
 
 		let version = plugin.get('approved');

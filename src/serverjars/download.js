@@ -50,6 +50,8 @@ module.exports = async bot => {
 			}
 
 			const get = async () => {
+				if (fs.existsSync(file))
+					fs.unlinkSync(file);
 				fs.writeFileSync(file, await download(url));
 				bot.log.console(`Downloaded ${capitalise(p)} ${v} (${build}): servers/${jar.get('id')}.jar`);
 				return hasha.fromFile(file, { algorithm: 'md5' });
