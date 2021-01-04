@@ -62,7 +62,7 @@ module.exports = async bot => {
 
 		fs.writeFileSync(path(`data/temp/${plugins[p].jar}`), await download(url));
 
-		bot.log.console(`Downloaded ${plugins[p].jar} (${build}): servers/${plugins[p].jar}`);
+		bot.log.console(`Downloaded ${plugins[p].jar} (${build}): plugins/${plugins[p].jar}`);
 
 		let temp = fs.readdirSync(path('data/temp/'));
 		if (temp.length < 1) {
