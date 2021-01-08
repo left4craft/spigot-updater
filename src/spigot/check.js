@@ -1,13 +1,9 @@
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
-const BlockResourcesPlugin = require('puppeteer-extra-plugin-block-resources');
 
 puppeteer.use(StealthPlugin());
 puppeteer.use(AdblockerPlugin());
-puppeteer.use(BlockResourcesPlugin({
-	blockedTypes: new Set(['image', 'stylesheet'])
-}));
 
 module.exports = async bot => {
 
