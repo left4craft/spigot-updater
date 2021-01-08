@@ -6,10 +6,8 @@ module.exports = {
 		jar: {
 			type: 'waterfall',
 			version: '1.16',
-			name: 'server.jar' // filename on remote server
 		},
 		max_players: 1,
-		plugins_dir: '/plugins/',
 		plugins: [
 			'BTLP_Bungee',
 		]
@@ -17,19 +15,17 @@ module.exports = {
 	Hub: {
 		// host: 'mc.left4craft.org:25566',
 		left4status: 'hub',
-		pterodactyl_id: 'b7eefb65',
+		pterodactyl_id: 'fb4fc893',
 		jar: {
 			type: 'paper',
 			version: '1.16',
-			name: 'server.jar' // filename on remote server
 		},
 		max_players: 1,
-		plugins_dir: '/plugins/',
 		plugins: [
 			'BTLP_Bukkit',
 			'EssentialsX',
 			'Left4Chat',
-			'Spartan',
+			// 'Spartan',
 		]
 	},
 	Survival: {
@@ -39,15 +35,13 @@ module.exports = {
 		jar: {
 			type: 'paper',
 			version: '1.16',
-			name: 'server.jar' // filename on remote server
 		},
 		max_players: 1,
-		plugins_dir: '/plugins/',
 		plugins: [
 			'BTLP_Bukkit',
 			'EssentialsX',
 			'Left4Chat',
-			'Spartan',
+			// 'Spartan',
 		]
 	},
 	Creative: {
@@ -57,33 +51,30 @@ module.exports = {
 		jar: {
 			type: 'paper',
 			version: '1.16',
-			name: 'server.jar' // filename on remote server
 		},
 		max_players: 1,
-		plugins_dir: '/plugins/',
 		plugins: [
 			'BTLP_Bukkit',
 			'EssentialsX',
 			'Left4Chat',
-			'Spartan',
+			// 'Spartan',
+			'FAWE',
 		]
 	},
 	PartyGames: {
 		// host: 'mc.left4craft.org:25569',
 		left4status: 'partygames',
-		pterodactyl_id: '',
+		pterodactyl_id: 'f1133caf',
 		jar: {
 			type: 'paper',
 			version: '1.16',
-			name: 'server.jar' // filename on remote server
 		},
 		max_players: 1,
-		plugins_dir: '/plugins/',
 		plugins: [
 			'BTLP_Bukkit',
 			'EssentialsX',
 			'Left4Chat',
-			'Spartan',
+			// 'Spartan',
 		]
 	},
 	Build: {
@@ -93,15 +84,13 @@ module.exports = {
 		jar: {
 			type: 'paper',
 			version: '1.16',
-			name: 'server.jar' // filename on remote server
 		},
 		max_players: 1,
-		plugins_dir: '/plugins/',
 		plugins: [
 			'BTLP_Bukkit',
 			'EssentialsX',
 			'Left4Chat',
-			'Spartan',
+			// 'Spartan',
 		]
 	}
 };

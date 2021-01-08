@@ -59,6 +59,8 @@ class Bot extends DiscordClient {
 			if (!this.channel)
 				this.log.warn(`Could not get channel with ID of ${this.config.channel_id} in channels cache`);
 
+			this.channel.send('❗ The bot will not respond to reactions on any messages before this.');
+
 			const Updater = require('./updater');
 			const updater = new Updater(this);
 

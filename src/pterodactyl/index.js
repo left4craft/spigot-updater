@@ -19,6 +19,17 @@ class Pterodactyl {
 	}
 
 	/**
+	 * @description Get the power state of a server
+	 * @param {String} server The ID of the server you want to check
+	 */
+	async getPowerState(server) {
+		let endpoint = `${this.client}/servers/${server}/resources`;
+		let response = await this.http.getJSON(endpoint);
+		response = await response.json();
+		return response.attributes.current_state;
+	}
+	
+	/**
 	 * @description Change the power state of a server
 	 * @param {String} server The ID of the server you want to change
 	 * @param {String} state The new power state
@@ -30,6 +41,14 @@ class Pterodactyl {
 		});
 		// return await response.json();
 		return response;
+	}
+
+	/**
+	 * @description Kill a server
+	 * @param {String} server The ID of the server you want to kill
+	 */
+	async kill(server) {
+		return await this.changePowerState(server, 'kill');
 	}
 
 	/**
@@ -52,9 +71,9 @@ class Pterodactyl {
 	 * @description Upload a file
 	 * @param {String} server The ID of the server you want to upload to
 	 * @param {String} path The remote file path
-	 * @param file The file you want to upload
+	 * @param {Array} files Array of file paths
 	 */
-	async upload(server, path, file) {
+	async upload(server, path, files) {
 		let endpoint = `${this.client}/servers/${server}/files/upload`;
 		let response = await this.http.getJSON(endpoint); // make GET request
 		response = await response.json();
@@ -65,7 +84,7 @@ class Pterodactyl {
 		url.search = params.toString(); // update the URL's params
 		url = url.toString(); // finished manipulating the URL, turn it back into a string
 
-		return await this.http.uploadFile(url, file);
+		return await this.http.uploadFiles(url, files);
 	}
 
 }

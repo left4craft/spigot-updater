@@ -33,14 +33,14 @@ module.exports = async bot => {
 				build = jar.get('approved_build'),
 				fileName = jar.get('approved_file');
 			
-			let file = path(`data/servers/${jar.get('id')}.jar`),
+			let file = path(`data/servers/${jar.get('id')}/server.jar`),
 				url = `${API}/${p}/versions/${version}/builds/${build}/downloads/${fileName}`;
 			
 			const get = async  () => {
 				if (fs.existsSync(file))
 					fs.unlinkSync(file);
 				fs.writeFileSync(file, await download(url));
-				bot.log.console(`Downloaded ${capitalise(p)} ${v} (${build}): servers/${jar.get('id')}.jar`);
+				bot.log.console(`Downloaded ${capitalise(p)} ${v} (${build}): servers/${jar.get('id')}`);
 				return hasha.fromFile(file, { algorithm: 'sha256' });
 			};
 			

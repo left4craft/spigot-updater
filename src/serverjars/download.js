@@ -31,7 +31,7 @@ module.exports = async bot => {
 			if (jar.get('downloaded') === jar.get('approved_build')) continue;
 
 			let build = jar.get('approved_build'),
-				file = path(`data/servers/${jar.get('id')}.jar`);
+				file = path(`data/servers/${jar.get('id')}/server.jar`);
 
 			let data, latest, url;
 

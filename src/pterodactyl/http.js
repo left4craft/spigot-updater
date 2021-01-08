@@ -1,3 +1,4 @@
+const fs = require('fs');
 const fetch = require('node-fetch');
 const FormData = require('form-data');
 
@@ -18,7 +19,7 @@ class HTTP {
 	 * @param {String} endpoint The URL
 	 * @param {Object} body JSON object to POST
 	 */
-	async postJSON(endpoint, body) {
+	postJSON(endpoint, body) {
 		return fetch(endpoint, {
 			method: 'post',
 			body: JSON.stringify(body),
@@ -49,11 +50,12 @@ class HTTP {
 	/**
 	 * @description POST a file
 	 * @param {String} endpoint The URL
-	 * @param {Object} file File to upload
+	 * @param {Array} files Files to upload
 	 */
-	uploadFile(endpoint, file) {
+	uploadFiles(endpoint, files) {
 		const form = new FormData();
-		form.append('files', file);
+		for (let f of files)
+			form.append('files', fs.createReadStream(f));
 		return fetch(endpoint, {
 			method: 'POST',
 			body: form,
