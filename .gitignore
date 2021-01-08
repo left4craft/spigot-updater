@@ -1,9 +1,13 @@
+# Folders
 node_modules
-logs
-data/servers.json
-data/plugins.json
+logs/
 data/temp
 data/plugins
 data/servers
+.vscode/
+
+# Files
+data/servers.json
+data/plugins.json
 .env
 /*.png
