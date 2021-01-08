@@ -7,6 +7,14 @@ puppeteer.use(AdblockerPlugin());
 
 module.exports = async bot => {
 
+	let plugins = {};
+	Object.keys(bot.config.plugins)
+		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'spigot')
+		.forEach(plugin => plugins[plugin] = bot.config.plugins[plugin]);
+
+	if (plugins.length < 1)
+		return bot.log.console('No spigot plugins need to be checked, skipping spigot browser');
+
 	bot.log.console('Checking for updates for plugins on SpigotMC');
 	bot.log.console('Starting browser');
 
@@ -50,12 +58,6 @@ module.exports = async bot => {
 	} else {
 		bot.log.console('Skipping authentication');
 	}
-	
-
-	let plugins = {};
-	Object.keys(bot.config.plugins)
-		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'spigot')
-		.forEach(plugin => plugins[plugin] = bot.config.plugins[plugin]);
 		
 	for (const p in plugins) {
 		await page.goto(`https://www.spigotmc.org/resources/${plugins[p].resource}/updates`);
