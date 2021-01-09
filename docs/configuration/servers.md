@@ -71,7 +71,7 @@ This file should export an object of server objects:
 		:octicons-checklist-24: Type: `String`
 		{: .details }
 
-		The server type, such as `paper`, `spigot`, and `bungeecord`. Must be a supported server type from the API you chose for [`server_jars_api` in `config.js`](../config/#servers_jars_api).
+		The server type, such as `paper`, `spigot`, and `bungeecord`. Must be a supported server type from the API you chose for [`server_jars_api` in `config.js`](../config/#server_jars_api).
 
 	???+ summary "version"
 		#### version
