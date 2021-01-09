@@ -43,4 +43,4 @@ The server is automatically stopped before and started after uploading, to avoid
 
 ## Donate
 
-Sponsor this project at [left4craft.org/shop](https:/www.left4craft.org/shop).
+Sponsor this project at [left4craft.org/shop](https://www.left4craft.org/shop).
