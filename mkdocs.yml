@@ -11,6 +11,9 @@ repo_url: https://github.com/left4craft/spigot-updater
 # Copyright
 copyright: '&copy; 2020 Left4Craft'
 
+extra_css:
+  - stylesheets/extra.css
+
 # Configuration
 theme:
   name: material
@@ -48,6 +51,7 @@ plugins:
 
 # Extensions
 markdown_extensions:
+  - attr_list
   - admonition
   - codehilite:
       guess_lang: false

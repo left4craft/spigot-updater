@@ -1,1 +1,6 @@
 title: Configuration
+arrange:
+ - env.md
+ - config.md
+ - servers.md
+ - plugins.md

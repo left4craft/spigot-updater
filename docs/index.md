@@ -3,12 +3,15 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/Left4Craft/spigot-updater?style=for-the-badge)
 ![GitHub deployments](https://img.shields.io/github/deployments/Left4Craft/spigot-updater/github-pages?label=GitHub%20Pages&style=for-the-badge)
 ![GitHub top language](https://img.shields.io/github/languages/top/Left4Craft/spigot-updater?color=yellow&style=for-the-badge)
-![GitHub package.json version](https://img.shields.io/github/package-json/v/Left4Craft/spigot-updater?style=for-the-badge)
+![GitHub tag (latest SemVer pre-release)](https://img.shields.io/github/v/tag/Left4Craft/spigot-updater?include_prereleases&style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/Left4Craft/spigot-updater?style=for-the-badge)
+<!-- ![GitHub package.json version](https://img.shields.io/github/package-json/v/Left4Craft/spigot-updater?style=for-the-badge) -->
 
 # Spigot updater
 
 **An automated update system for Pterodactyl Minecraft servers and their plugins.**
+
+Originally made for [Left4Craft](https://www.left4craft.org), this tool integrates with Discord, Pterodactyl, and various other APIs to keep your servers and their plugins up to date with minimal input from owners and admins.
 
 ## What it does
 
@@ -24,14 +27,20 @@ You can choose between PaperMC or the ServerJars API for your servers.
 
 Plugins can be sourced from GitHub Releases, a Jenkins build server, or SpigotMC.
 
+The server is automatically stopped before and started after uploading, to avoid corruption.
+
 ## Limitations
 
 - You can't update a plugin on some servers and not others (except if you have servers with different Minecraft versions, you could have multiple plugins from the same source).
 
 ## Installation & setup
 
-[Installation](./installation).
+[Installation](./installation) and [configuration](./configuration).
 
 ## Support
 
 [![Discord server](https://discordapp.com/api/guilds/424571587413540874/widget.png?style=banner2)](https://discord.left4craft.org)
+
+## Donate
+
+Sponsor this project at [left4craft.org/shop](https:/www.left4craft.org/shop).
