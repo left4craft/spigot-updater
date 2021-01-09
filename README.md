@@ -35,7 +35,7 @@ The server is automatically stopped before and started after uploading, to avoid
 
 ## Installation & setup
 
-Visit [the docs](https://left4craft.github.io/spigot-updater/) for installation, setup and configuration instructions.
+Visit [the docs](https://left4craft.github.io/spigot-updater/) for installation, setup, and configuration instructions.
 
 ## Support
 

@@ -35,7 +35,7 @@ The server is automatically stopped before and started after uploading, to avoid
 
 ## Installation & setup
 
-[Installation](./installation) and [configuration](./configuration).
+[Installation](./installation) and [configuration](./configuration/env).
 
 ## Support
 
