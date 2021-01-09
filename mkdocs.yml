@@ -1,6 +1,6 @@
 # Project information
 site_name: Spigot updater
-site_description: An automated update system for Minecraft servers and their plugins using Pterodactyl.
+site_description: An automated update system for Pterodactyl Minecraft servers and their plugins.
 site_author: Left4Craft
 site_url: https://left4craft.github.io/spigot-updater
 
