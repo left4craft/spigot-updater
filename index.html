@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://left4craft.github.io/spigot-updater/">
       
       <link rel="shortcut icon" href="img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.3">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.4">
     
     
       
@@ -24,10 +24,10 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.3b61ea93.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.15aa0b43.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.39b8e14a.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/palette.75751829.min.css">
         
           
           
@@ -45,6 +45,8 @@
       
     
     
+    
+      <link rel="stylesheet" href="stylesheets/extra.css">
     
     
       
@@ -268,6 +270,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#donate" class="md-nav__link">
+    Donate
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -319,19 +328,6 @@
 
 
   <li class="md-nav__item">
-    <a href="configuration/config/" class="md-nav__link">
-      Config
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-
-  <li class="md-nav__item">
     <a href="configuration/env/" class="md-nav__link">
       ENV
     </a>
@@ -345,8 +341,8 @@
 
 
   <li class="md-nav__item">
-    <a href="configuration/plugins/" class="md-nav__link">
-      Plugins
+    <a href="configuration/config/" class="md-nav__link">
+      Config
     </a>
   </li>
 
@@ -360,6 +356,19 @@
   <li class="md-nav__item">
     <a href="configuration/servers/" class="md-nav__link">
       Servers
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="configuration/plugins/" class="md-nav__link">
+      Plugins
     </a>
   </li>
 
@@ -428,6 +437,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#donate" class="md-nav__link">
+    Donate
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -450,10 +466,13 @@
 <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/Left4Craft/spigot-updater?style=for-the-badge" />
 <img alt="GitHub deployments" src="https://img.shields.io/github/deployments/Left4Craft/spigot-updater/github-pages?label=GitHub%20Pages&amp;style=for-the-badge" />
 <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Left4Craft/spigot-updater?color=yellow&amp;style=for-the-badge" />
-<img alt="GitHub package.json version" src="https://img.shields.io/github/package-json/v/Left4Craft/spigot-updater?style=for-the-badge" />
+<img alt="GitHub tag (latest SemVer pre-release)" src="https://img.shields.io/github/v/tag/Left4Craft/spigot-updater?include_prereleases&amp;style=for-the-badge" />
 <img alt="GitHub" src="https://img.shields.io/github/license/Left4Craft/spigot-updater?style=for-the-badge" /></p>
+<!-- ![GitHub package.json version](https://img.shields.io/github/package-json/v/Left4Craft/spigot-updater?style=for-the-badge) -->
+
 <h1 id="spigot-updater">Spigot updater<a class="headerlink" href="#spigot-updater" title="Permanent link">&para;</a></h1>
 <p><strong>An automated update system for Pterodactyl Minecraft servers and their plugins.</strong></p>
+<p>Originally made for <a href="https://www.left4craft.org">Left4Craft</a>, this tool integrates with Discord, Pterodactyl, and various other APIs to keep your servers and their plugins up to date with minimal input from owners and admins.</p>
 <h2 id="what-it-does">What it does<a class="headerlink" href="#what-it-does" title="Permanent link">&para;</a></h2>
 <p>This periodically checks your servers and plugins for updates and alerts you through Discord when when it finds a new version. You will be prompted to approve updates and are usually given links to the build/version's changelog.</p>
 <p>Once per hour it downloads any updates you have approved, then twice a day it will attempt to upload the downloads JARs. Before uploading, it checks each server's player count, and doesn't update unless and admin reacts to a Discord message to approve it. This it to avoid servers being restarted with lots of players online and when there isn't an admin around to fix it if there is an issue after updating.</p>
@@ -461,14 +480,17 @@
 <p>Look at the code if you want to know exactly how it works.</p>
 <p>You can choose between PaperMC or the ServerJars API for your servers.</p>
 <p>Plugins can be sourced from GitHub Releases, a Jenkins build server, or SpigotMC.</p>
+<p>The server is automatically stopped before and started after uploading, to avoid corruption.</p>
 <h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h2>
 <ul>
 <li>You can't update a plugin on some servers and not others (except if you have servers with different Minecraft versions, you could have multiple plugins from the same source).</li>
 </ul>
 <h2 id="installation-setup">Installation &amp; setup<a class="headerlink" href="#installation-setup" title="Permanent link">&para;</a></h2>
-<p><a href="./installation">Installation</a>.</p>
+<p><a href="./installation">Installation</a> and <a href="./configuration">configuration</a>.</p>
 <h2 id="support">Support<a class="headerlink" href="#support" title="Permanent link">&para;</a></h2>
 <p><a href="https://discord.left4craft.org"><img alt="Discord server" src="https://discordapp.com/api/guilds/424571587413540874/widget.png?style=banner2" /></a></p>
+<h2 id="donate">Donate<a class="headerlink" href="#donate" title="Permanent link">&para;</a></h2>
+<p>Sponsor this project at <a href="https:/www.left4craft.org/shop">left4craft.org/shop</a>.</p>
                 
                   
                     
@@ -560,8 +582,8 @@
       
     </div>
     
-      <script src="assets/javascripts/vendor.08c56446.min.js"></script>
-      <script src="assets/javascripts/bundle.6ced434e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="assets/javascripts/vendor.93c04032.min.js"></script>
+      <script src="assets/javascripts/bundle.83e5331e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

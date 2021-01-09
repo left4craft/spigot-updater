@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://left4craft.github.io/spigot-updater/installation/">
       
       <link rel="shortcut icon" href="../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.3">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.4">
     
     
       
@@ -24,10 +24,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.3b61ea93.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.15aa0b43.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.39b8e14a.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.75751829.min.css">
         
           
           
@@ -45,6 +45,8 @@
       
     
     
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
     
     
       
@@ -66,6 +68,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#installation" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -216,10 +223,68 @@
     
     <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
     
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Installation
+        <span class="md-nav__icon md-icon"></span>
+      </label>
     
     <a href="./" class="md-nav__link md-nav__link--active">
       Installation
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instructions" class="md-nav__link">
+    Instructions
+  </a>
+  
+    <nav class="md-nav" aria-label="Instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#for-hosting-on-pterodactyl" class="md-nav__link">
+    For hosting on Pterodactyl
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#for-standalone-hosting" class="md-nav__link">
+    For standalone hosting
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -255,19 +320,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../configuration/config/" class="md-nav__link">
-      Config
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-
-  <li class="md-nav__item">
     <a href="../configuration/env/" class="md-nav__link">
       ENV
     </a>
@@ -281,8 +333,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../configuration/plugins/" class="md-nav__link">
-      Plugins
+    <a href="../configuration/config/" class="md-nav__link">
+      Config
     </a>
   </li>
 
@@ -300,6 +352,19 @@
   </li>
 
         
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../configuration/plugins/" class="md-nav__link">
+      Plugins
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -312,6 +377,64 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instructions" class="md-nav__link">
+    Instructions
+  </a>
+  
+    <nav class="md-nav" aria-label="Instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#for-hosting-on-pterodactyl" class="md-nav__link">
+    For hosting on Pterodactyl
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#for-standalone-hosting" class="md-nav__link">
+    For standalone hosting
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
@@ -322,9 +445,27 @@
                   </a>
                 
                 
-                  <h1>Installation</h1>
-                
-                
+                <h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
+<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Node.JS &gt;=14.x</li>
+<li>A MySQL or MariaDB database</li>
+<li>Minecraft servers running on Pterodactyl</li>
+</ul>
+<h2 id="instructions">Instructions<a class="headerlink" href="#instructions" title="Permanent link">&para;</a></h2>
+<h3 id="for-hosting-on-pterodactyl">For hosting on Pterodactyl<a class="headerlink" href="#for-hosting-on-pterodactyl" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Create a new server with <a href="https://github.com/parkervcp/eggs/tree/master/bots/discord/discord.js">a Node.JS egg</a>, using this repository</li>
+<li>Set the "Bot js file" to <code>src/index.js</code></li>
+<li><a href="../configuration/env">Configure</a></li>
+</ol>
+<h3 id="for-standalone-hosting">For standalone hosting<a class="headerlink" href="#for-standalone-hosting" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Clone this repository</li>
+<li>Install dependencies with <code>npm i</code></li>
+<li>Start with <code>npm start</code> or <code>node src/</code></li>
+<li><a href="../configuration/env">Configure</a></li>
+</ol>
                 
                   
                     
@@ -371,13 +512,13 @@
           </a>
         
         
-          <a href="../configuration/config/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../configuration/env/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Config
+                ENV
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">
@@ -430,8 +571,8 @@
       
     </div>
     
-      <script src="../assets/javascripts/vendor.08c56446.min.js"></script>
-      <script src="../assets/javascripts/bundle.6ced434e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="../assets/javascripts/vendor.93c04032.min.js"></script>
+      <script src="../assets/javascripts/bundle.83e5331e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
