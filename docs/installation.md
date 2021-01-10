@@ -14,7 +14,9 @@
 2. Set the "Bot js file" to `src/index.js`
 3. On the host machine, create a new file called `Dockerfile`:
 ```
-t chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
+FROM node:lts-slim
+
+# Install latest chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
 # Note: this installs the necessary libs to make the bundled version of Chromium that Puppeteer
 # installs, work.
 RUN apt-get update \
@@ -32,6 +34,7 @@ WORKDIR     /home/container
 
 COPY        ./entrypoint.sh /entrypoint.sh
 CMD         ["/bin/bash", "/entrypoint.sh"]
+
 ```
 
 4. Copy the [nodejs entrypoint.sh file](https://github.com/pterodactyl/images/blob/nodejs/entrypoint.sh) into the same directory as Dockerfile, and save it as `entrypoint.sh`
