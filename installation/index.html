@@ -457,7 +457,53 @@
 <ol>
 <li>Create a new server with <a href="https://github.com/parkervcp/eggs/tree/master/bots/discord/discord.js">a Node.JS egg</a>, using this repository</li>
 <li>Set the "Bot js file" to <code>src/index.js</code></li>
-<li><a href="../configuration/env">Configure</a></li>
+<li>
+<p>On the host machine, create a new file called <code>Dockerfile</code>:
+<div class="highlight"><pre><span></span><code>t chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
+# Note: this installs the necessary libs to make the bundled version of Chromium that Puppeteer
+# installs, work.
+RUN apt-get update \
+    &amp;&amp; apt-get install -y wget gnupg git \
+    &amp;&amp; wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    &amp;&amp; sh -c &#39;echo &quot;deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main&quot; &gt;&gt; /etc/apt/sources.list.d/google.list&#39; \
+    &amp;&amp; apt-get update \
+    &amp;&amp; apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
+      --no-install-recommends \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+USER        container
+ENV         USER=container HOME=/home/container
+WORKDIR     /home/container
+
+COPY        ./entrypoint.sh /entrypoint.sh
+CMD         [&quot;/bin/bash&quot;, &quot;/entrypoint.sh&quot;]
+</code></pre></div></p>
+</li>
+<li>
+<p>Copy the <a href="https://github.com/pterodactyl/images/blob/nodejs/entrypoint.sh">nodejs entrypoint.sh file</a> into the same directory as Dockerfile, and save it as <code>entrypoint.sh</code>
+<div class="highlight"><pre><span></span><code>#!/bin/ash
+cd /home/container
+
+# Make internal Docker IP address available to processes.
+export INTERNAL_IP=`ip route get 1 | awk &#39;{print $NF;exit}&#39;`
+
+# Replace Startup Variables
+MODIFIED_STARTUP=`eval echo $(echo ${STARTUP} | sed -e &#39;s/{{/${/g&#39; -e &#39;s/}}/}/g&#39;)`
+echo &quot;:/home/container$ ${MODIFIED_STARTUP}&quot;
+
+# Run the Server
+eval ${MODIFIED_STARTUP}
+</code></pre></div></p>
+</li>
+<li>
+<p>Build the docker image: <code>docker build -t puppeteer-chrome-linux .</code></p>
+</li>
+<li>
+<p>In your server's startup settings, change the docker image to <code>puppeteer-chrome-linux:latest</code></p>
+</li>
+<li>
+<p><a href="../configuration/env">Configure</a></p>
+</li>
 </ol>
 <h3 id="for-standalone-hosting">For standalone hosting<a class="headerlink" href="#for-standalone-hosting" title="Permanent link">&para;</a></h3>
 <ol>
@@ -474,7 +520,7 @@
 <div class="md-source-date">
   <small>
     
-      Last update: <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 9, 2021</span>
+      Last update: <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 10, 2021</span>
     
   </small>
 </div>
