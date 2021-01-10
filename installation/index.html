@@ -459,7 +459,9 @@
 <li>Set the "Bot js file" to <code>src/index.js</code></li>
 <li>
 <p>On the host machine, create a new file called <code>Dockerfile</code>:
-<div class="highlight"><pre><span></span><code>t chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
+<div class="highlight"><pre><span></span><code>FROM node:lts-slim
+
+# Install latest chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
 # Note: this installs the necessary libs to make the bundled version of Chromium that Puppeteer
 # installs, work.
 RUN apt-get update \
