@@ -46,7 +46,7 @@ module.exports = async bot => {
 	});
 
 	const page = await browser.newPage();
-	await page.setDefaultNavigationTimeout(bot.config.cloudflare_timeout+10000);
+	await page.setDefaultNavigationTimeout(bot.config.cloudflare_timeout);
 
 	await page._client.send('Page.setDownloadBehavior', {
 		behavior: 'allow',
