@@ -46,7 +46,7 @@ module.exports = async bot => {
 	});
 
 	const page = await browser.newPage();
-	await page.setDefaultNavigationTimeout(config.cloudflare_timeout+10000);
+	await page.setDefaultNavigationTimeout(bot.config.cloudflare_timeout+10000);
 
 	await page._client.send('Page.setDownloadBehavior', {
 		behavior: 'allow',
@@ -55,7 +55,7 @@ module.exports = async bot => {
 
 	bot.log.console('Loading spigotmc.org (waiting for Cloudflare)');
 	await page.goto('https://www.spigotmc.org/login');
-	await page.waitForTimeout(config.cloudflare_timeout);
+	await page.waitForTimeout(bot.config.cloudflare_timeout);
 	// await page.waitForNavigation();
 	await page.screenshot({ path: 'loaded.png', fullPage: true });
 
