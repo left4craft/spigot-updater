@@ -130,7 +130,7 @@ module.exports = async (bot) => {
 			}
 
 			let data = JSON.parse(s.get('plugins'));
-			if (plugins.length > 1) {
+			if (plugins.length >= 1) {
 				for (let p of plugins) {
 					let plugin = await bot.db.Plugins.findOne({
 						where: {
