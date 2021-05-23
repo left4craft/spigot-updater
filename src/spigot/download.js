@@ -34,16 +34,30 @@ module.exports = async bot => {
 	bot.log.console('Starting browser');
 
 	const {
-		PROXY
+		PROXY,
+		CHROMEPATH,
 	} = process.env;
 
-	const browser = await puppeteer.launch({
-		headless: bot.config.headless_browser,
-		args: [
-			bot.config.no_sandbox_browser ? '--no-sandbox' : '',
-			PROXY ? '--proxy-server=' + PROXY : ''
-		]
-	});
+	let browser;
+
+	if(CHROMEPATH) {
+		browser = await puppeteer.launch({
+			headless: bot.config.headless_browser,
+			executablePath: CHROMEPATH,
+			args: [
+				bot.config.no_sandbox_browser ? '--no-sandbox' : '',
+				PROXY ? '--proxy-server=' + PROXY : ''
+			]
+		});
+	} else {
+		browser = await puppeteer.launch({
+			headless: bot.config.headless_browser,
+			args: [
+				bot.config.no_sandbox_browser ? '--no-sandbox' : '',
+				PROXY ? '--proxy-server=' + PROXY : ''
+			]
+		});
+	}
 
 	const page = await browser.newPage();
 	await page.setDefaultNavigationTimeout(bot.config.cloudflare_timeout);
