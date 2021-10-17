@@ -153,6 +153,6 @@ module.exports = async bot => {
 	}
 
 	bot.log.console('Closing browser');
-	// await browser.close();
+	await browser.close();
 
 };
