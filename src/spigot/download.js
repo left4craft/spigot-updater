@@ -69,9 +69,17 @@ module.exports = async bot => {
 
 	bot.log.info('Loading spigotmc.org (waiting for Cloudflare)');
 	await page.goto('https://www.spigotmc.org/login');
-	await page.waitForTimeout(bot.config.cloudflare_timeout);
-	// await page.waitForNavigation();
+	// await page.waitForTimeout(bot.config.cloudflare_timeout);
+	try {
+		await page.waitForSelector('#ctrl_pageLogin_login');
+	} catch (e) {
+		bot.log.info('Screenshotting as error.png');
+		await page.screenshot({ path: 'error.png', fullPage: true });
+		return bot.log.error(e);
+	}
+	bot.log.info('Found login page! Saving as loaded.png');
 	await page.screenshot({ path: 'loaded.png', fullPage: true });
+	await page.waitForTimeout(bot.config.navigation_delay);
 
 	const {
 		SPIGOT_EMAIL,
@@ -99,7 +107,7 @@ module.exports = async bot => {
 	}
 
 	for (const p in plugins) {
-
+		await page.waitForTimeout(bot.config.navigation_delay);
 		let plugin = await bot.db.Plugins.findOne({
 			where: {
 				name: p
