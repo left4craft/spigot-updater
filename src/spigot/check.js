@@ -56,8 +56,8 @@ module.exports = async bot => {
 	try {
 		await page.waitForSelector('.spigot_colorOverlay');
 		bot.log.info('Loaded spigotmc.org! Saving screenshot as loaded.png...');
-		await page.screenshot({ path: 'loaded.png', fullPage: true });
 		await page.waitForTimeout(bot.config.navigation_delay);
+		await page.screenshot({ path: 'loaded.png', fullPage: true });
 
 		if(page.url().endsWith('login')) {
 			bot.log.info('Found login page, attempting to log in...');

@@ -71,15 +71,15 @@ module.exports = async bot => {
 		behavior: 'allow',
 		downloadPath: path('data/temp/')
 	});
-
+	await page.waitForTimeout(bot.config.navigation_delay);
 	bot.log.info('Loading spigotmc.org (waiting for Cloudflare)');
 	await page.goto('https://www.spigotmc.org/login');
 	// await page.waitForTimeout(bot.config.cloudflare_timeout);
 	try {
 		await page.waitForSelector('.spigot_colorOverlay');
 		bot.log.info('Loaded spigotmc.org! Saving screenshot as loaded.png...');
-		await page.screenshot({ path: 'loaded.png', fullPage: true });
 		await page.waitForTimeout(bot.config.navigation_delay);
+		await page.screenshot({ path: 'loaded.png', fullPage: true });
 
 		if(page.url().endsWith('login')) {
 			bot.log.info('Found login page, attempting to log in...');
@@ -142,7 +142,7 @@ module.exports = async bot => {
 			bot.log.info(`Downloading ${p} (${version}): plugins/${plugins[p].jar}`);
 			await page.goto(url);
 		} catch (e) {
-			bot.log.error(e); // it doesn't like downloading
+			// bot.log.error(e); // it doesn't like downloading
 			continue;
 		}
 
