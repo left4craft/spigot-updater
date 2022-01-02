@@ -60,16 +60,16 @@ module.exports = async bot => {
 				.map(c => `> [${c.summary}](https://github.com/PaperMC/${data.project_name}/commit/${c.commit})`)
 				.join('\n\n');
 					
-			let msg = await bot.channel.send(
+			let msg = await bot.channel.send({
 				// new bot.Embed()
-				bot.utils.createEmbed()
+				embeds: [bot.utils.createEmbed()
 					.setColor('ORANGE')
 					.setTitle(`🆕 A new build of ${data.project_name} ${latest.version} is available (${jar.get('latest_build') || 0} -> ${latest.build})`)
 					.setDescription('React with ✅ to approve this update and add it to the queue.')
 					.addField('Changelog', 'Click commit summaries for more details.\n' + changes)
 					.addField('Affected servers', `Servers using ${data.project_name} ${v}:\n${affected}`)
-					.setFooter(`Build ${latest.build}`)
-			);
+					.setFooter(`Build ${latest.build}`)]
+			});
 			msg.react('✅');
 			bot.messages.set(msg.id, {
 				server_jar: {
