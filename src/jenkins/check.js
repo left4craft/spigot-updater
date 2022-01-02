@@ -47,16 +47,16 @@ module.exports = async bot => {
 			.join(', ');
 
 
-		let msg = await bot.channel.send(
+		let msg = await bot.channel.send({
 			// new bot.Embed()
-			bot.utils.createEmbed()
+			embeds: [bot.utils.createEmbed()
 				.setColor('ORANGE')
 				.setTitle(`🆕 A new version of ${p} is available`)
 				.setDescription('React with ✅ to approve this update and add it to the queue.')
 				.addField('Changelog', `> [Summary & status](${latest.url})\n\n> [Full changes](${latest.url}changes)`)
 				.addField('Affected servers', `Servers using this plugin:\n${affected}`)
-				.setFooter(`${plugins[p].job} build ${latest.number}`)
-		);
+				.setFooter(`${plugins[p].job} build ${latest.number}`)]
+		});
 		msg.react('✅');
 		bot.messages.set(msg.id, {
 			plugin: {

@@ -67,23 +67,23 @@ module.exports = async (bot) => {
 		let max = bot.config.servers[server].max_players;
 		let players = await getPlayerCount(bot, server); // server's player count
 		if (players > max) {
-			message = await bot.channel.send(
-				bot.utils.createEmbed()
+			message = await bot.channel.send({
+				embeds: [bot.utils.createEmbed()
 					.setColor('RED')
 					.setTitle(`⚠️ ${server} needs to update, but there are more than ${max} players online`)
 					.setDescription(`React with ⚠️ to update the server now, whilst there are **${players} players online**, react with ❌ to dismiss.`)
-					.addField('Plugins', plugins.map(p => `\`${p}\``).join(', ') || 'None')
-			);
+					.addField('Plugins', plugins.map(p => `\`${p}\``).join(', ') || 'None')]
+			});
 			await message.react('⚠️');
 			await message.react('❌');
 		} else {
-			message = await bot.channel.send(
-				bot.utils.createEmbed()
+			message = await bot.channel.send({
+				embeds: [bot.utils.createEmbed()
 					.setColor('ORANGE')
 					.setTitle(`📣 ${server} needs to update`)
 					.setDescription(`React with ✅ to update the server now, whilst there are **${players} players online**, react with ❌ to dismiss.`)
-					.addField('Plugins', plugins.map(p => `\`${p}\``).join(', ') || 'None')
-			);
+					.addField('Plugins', plugins.map(p => `\`${p}\``).join(', ') || 'None')]
+			});
 			await message.react('✅');
 			await message.react('❌');
 		}

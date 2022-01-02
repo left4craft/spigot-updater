@@ -79,16 +79,16 @@ module.exports = async bot => {
 				.map(s => `\`${s}\``)
 				.join(', ');
 
-			let msg = await bot.channel.send(
+			let msg = await bot.channel.send({
 				// new bot.Embed()
-				bot.utils.createEmbed()
+				embeds: [bot.utils.createEmbed()
 					.setColor('ORANGE')
 					.setTitle(`🆕 A new build of ${capitalise(p)} ${latest.version} is available`)
 					.setDescription('React with ✅ to approve this update and add it to the queue.')
 				// .addField('Changelog', 'ServerJars API does not provide a changelog or commit details.')
 					.addField('Affected servers', `Servers using ${capitalise(p)} ${v}:\n${affected}`)
-					.setFooter(`Built at ${new Date(latest.built * 1000).toLocaleString()}`)
-			);
+					.setFooter(`Built at ${new Date(latest.built * 1000).toLocaleString()}`)]
+			});
 			msg.react('✅');
 			bot.messages.set(msg.id, {
 				server_jar: {

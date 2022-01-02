@@ -122,16 +122,16 @@ module.exports = async bot => {
 			.join(', ');
 
 
-		let msg = await bot.channel.send(
+		let msg = await bot.channel.send({
 			// new bot.Embed()
-			bot.utils.createEmbed()
+			embeds: [bot.utils.createEmbed()
 				.setColor('ORANGE')
 				.setTitle(`🆕 A new version of ${p} is available`)
 				.setDescription('React with ✅ to approve this update and add it to the queue.')
 				.addField('Changelog', `[View updates on SpigotMC](https://www.spigotmc.org/resources/${plugins[p].resource}/updates)`)
 				.addField('Affected servers', `Servers using this plugin:\n${affected}`)
-				.setFooter(`SpigotMC version ${latest}`)
-		);
+				.setFooter(`SpigotMC version ${latest}`)]
+		});
 		msg.react('✅');
 		bot.messages.set(msg.id, {
 			plugin: {
