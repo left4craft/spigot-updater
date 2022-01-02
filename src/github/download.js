@@ -6,12 +6,12 @@ const { path, unzip } = require('../utils/fs');
 
 module.exports = async bot => {
 
-	bot.log.console('Clearing temp directory');
+	bot.log.info('Clearing temp directory');
 	for (const file of fs.readdirSync(path('data/temp/'))) {
 		fs.unlinkSync(path('data/temp/' + file));
 	}
 
-	bot.log.console('Checking for updates for plugins on GitHub');
+	bot.log.info('Checking for updates for plugins on GitHub');
 
 	const API = 'https://api.github.com';
 
@@ -57,7 +57,7 @@ module.exports = async bot => {
 
 		fs.writeFileSync(path(`data/temp/${plugins[p].jar}`), await download(url));
 
-		bot.log.console(`Downloaded ${plugins[p].jar} (${tag}): plugins/${plugins[p].jar}`);
+		bot.log.info(`Downloaded ${plugins[p].jar} (${tag}): plugins/${plugins[p].jar}`);
 
 		let temp = fs.readdirSync(path('data/temp/'));
 		if (temp.length < 1) {
@@ -68,7 +68,7 @@ module.exports = async bot => {
 		let file = temp[0];
 
 		if (plugins[p].zip_path && file.toLowerCase().endsWith('.zip')) {
-			bot.log.console('Extracting...');
+			bot.log.info('Extracting...');
 			await unzip(
 				plugins[p].zip_path,
 				path(`data/temp/${file}`),

@@ -49,7 +49,7 @@ module.exports = async bot => {
 
 			if (jar.get('latest_build') == latest.build) continue;
 
-			bot.log.console(`Found an update for ${data.project_name} ${v} (${jar.get('latest_build') || 0} -> ${latest.build})`);
+			bot.log.info(`Found an update for ${data.project_name} ${v} (${jar.get('latest_build') || 0} -> ${latest.build})`);
 
 			let affected = Object.keys(bot.config.servers)
 				.filter(s => bot.config.servers[s].jar.type === p && bot.config.servers[s].jar.version === v)

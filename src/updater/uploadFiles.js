@@ -53,7 +53,7 @@ module.exports = async (bot) => {
 	
 		let jar_needs_updating = s.get('current') !== sjar.get('downloaded');
 		if (plugins.length < 1 && !jar_needs_updating) { // if no plugins, and server jar is up to date
-			bot.log.console(`${server} has no plugins that need to be uploaded, skipping`);
+			bot.log.info(`${server} has no plugins that need to be uploaded, skipping`);
 			continue; // skip this server
 		}
 
@@ -119,7 +119,7 @@ module.exports = async (bot) => {
 
 			if (jar_needs_updating) {
 				// upload the file
-				bot.log.console(`Uploading server jar for ${server}`);
+				bot.log.info(`Uploading server jar for ${server}`);
 				await panel.upload(ID, '/', [
 					path(`data/servers/${sjar.get('id')}/server.jar`),
 				]);
@@ -145,7 +145,7 @@ module.exports = async (bot) => {
 				});
 	
 				let jars = plugins.map(p => path(`data/plugins/${bot.config.plugins[p].jar}`));
-				bot.log.console(`Uploading ${plugins.length} plugins for ${server}`);
+				bot.log.info(`Uploading ${plugins.length} plugins for ${server}`);
 				panel.upload(ID, '/plugins/', jars); // upload the files
 			}
 
@@ -180,7 +180,7 @@ module.exports = async (bot) => {
 			await message.reactions.removeAll();
 
 			if (updated) {
-				bot.log.console(`${updated.tag} authorised ${server} to update`);
+				bot.log.info(`${updated.tag} authorised ${server} to update`);
 				await message.edit(
 					bot.utils.createEmbed(message.embeds[0])
 						.setColor('DARK_GREEN')
@@ -188,7 +188,7 @@ module.exports = async (bot) => {
 						.setDescription(`Updated by ${updated}.`)
 				);
 			} else if (dismissed) {
-				bot.log.console(`${dismissed.tag} blocked ${server} from updating`);
+				bot.log.info(`${dismissed.tag} blocked ${server} from updating`);
 				await message.edit(
 					bot.utils.createEmbed(message.embeds[0])
 						.setColor('DARK_GREEN')

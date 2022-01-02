@@ -9,7 +9,7 @@ puppeteer.use(StealthPlugin());
 
 module.exports = async bot => {
 
-	bot.log.console('Clearing temp directory');
+	bot.log.info('Clearing temp directory');
 	for (const file of fs.readdirSync(path('data/temp/'))) {
 		fs.unlinkSync(path('data/temp/' + file));
 	}
@@ -29,9 +29,9 @@ module.exports = async bot => {
 		.forEach(plugin => plugins[plugin] = bot.config.plugins[plugin]);
 	
 	if (plugins.length < 1)
-		return bot.log.console('No spigot plugins need to be downloaded, skipping spigot browser');
+		return bot.log.info('No spigot plugins need to be downloaded, skipping spigot browser');
 
-	bot.log.console('Starting browser');
+	bot.log.info('Starting browser');
 
 	const {
 		PROXY,
@@ -67,7 +67,7 @@ module.exports = async bot => {
 		downloadPath: path('data/temp/')
 	});
 
-	bot.log.console('Loading spigotmc.org (waiting for Cloudflare)');
+	bot.log.info('Loading spigotmc.org (waiting for Cloudflare)');
 	await page.goto('https://www.spigotmc.org/login');
 	await page.waitForTimeout(bot.config.cloudflare_timeout);
 	// await page.waitForNavigation();
@@ -78,7 +78,7 @@ module.exports = async bot => {
 		SPIGOT_PASSWORD
 	} = process.env;
 	if (SPIGOT_EMAIL && SPIGOT_PASSWORD) {
-		bot.log.console('Logging into SpigotMC');
+		bot.log.info('Logging into SpigotMC');
 		try {
 			await page.type('#ctrl_pageLogin_login', SPIGOT_EMAIL);
 		} catch (e) {
@@ -95,7 +95,7 @@ module.exports = async bot => {
 		}
 		await page.screenshot({ path: 'authenticated.png', fullPage: true });
 	} else {
-		bot.log.console('Skipping authentication');
+		bot.log.info('Skipping authentication');
 	}
 
 	for (const p in plugins) {
@@ -118,7 +118,7 @@ module.exports = async bot => {
 		let url = `https://www.spigotmc.org/resources/${plugins[p].resource}/download?version=${version}`;
 
 		try {
-			bot.log.console(`Downloading ${p} (${version}): plugins/${plugins[p].jar}`);
+			bot.log.info(`Downloading ${p} (${version}): plugins/${plugins[p].jar}`);
 			await page.goto(url);
 		} catch (e) {
 			// bot.log.error(e); // it doesn't like downloading
@@ -136,7 +136,7 @@ module.exports = async bot => {
 		let file = temp[0];
 
 		if (plugins[p].zip_path && file.toLowerCase().endsWith('.zip')) {
-			bot.log.console('Extracting...');
+			bot.log.info('Extracting...');
 			await unzip(
 				plugins[p].zip_path,
 				path(`data/temp/${file}`),
@@ -152,7 +152,7 @@ module.exports = async bot => {
 		});
 	}
 
-	bot.log.console('Closing browser');
+	bot.log.info('Closing browser');
 	await browser.close();
 
 };

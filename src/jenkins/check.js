@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 
 module.exports = async bot => {
 
-	bot.log.console('Checking for updates for plugins on Jenkins');
+	bot.log.info('Checking for updates for plugins on Jenkins');
 
 	let plugins = {};
 	Object.keys(bot.config.plugins)
@@ -35,7 +35,7 @@ module.exports = async bot => {
 
 		// there is a new version
 
-		bot.log.console(`Found an update for '${plugins[p].jar}'`);
+		bot.log.info(`Found an update for '${plugins[p].jar}'`);
 
 		await plugin.update({
 			latest: latest.number,

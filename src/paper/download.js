@@ -40,7 +40,7 @@ module.exports = async bot => {
 				if (fs.existsSync(file))
 					fs.unlinkSync(file);
 				fs.writeFileSync(file, await download(url));
-				bot.log.console(`Downloaded ${capitalise(p)} ${v} (${build}): servers/${jar.get('id')}`);
+				bot.log.info(`Downloaded ${capitalise(p)} ${v} (${build}): servers/${jar.get('id')}`);
 				return hasha.fromFile(file, { algorithm: 'sha256' });
 			};
 			

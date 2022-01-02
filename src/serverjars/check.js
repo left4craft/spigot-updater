@@ -65,7 +65,7 @@ module.exports = async bot => {
 
 			if (jar.get('latest_build') == latest.built) continue;
 
-			bot.log.console(`Found an update for ${capitalise(p)} ${v}`);
+			bot.log.info(`Found an update for ${capitalise(p)} ${v}`);
 
 			jar = await jar.update({
 				latest_version: latest.version,

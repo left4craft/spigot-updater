@@ -36,8 +36,6 @@ class Bot extends DiscordClient {
 			autoReconnect: true,
 			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] 
 		});
-		
-		this.log = log;
 
 		this.utils = require('./utils/discord');
 		this.utils.init(this);

@@ -2,7 +2,7 @@ const fs = require('fs');
 const { path } = require('../utils/fs');
 
 module.exports = async (bot) => {
-	bot.log.console('Checking for server jar updates');
+	bot.log.info('Checking for server jar updates');
 	fs.readdir(path('data/servers/'), (err, items) => {
 		let directories = new Set(Object.keys(bot.config.servers)
 			.map(s => {
@@ -24,7 +24,7 @@ module.exports = async (bot) => {
 		await require('../serverjars/check')(bot);
 	
 	
-	bot.log.console('Checking for plugin updates');
+	bot.log.info('Checking for plugin updates');
 	await require('../spigot/check')(bot);
 	await require('../github/check')(bot);
 	await require('../jenkins/check')(bot);

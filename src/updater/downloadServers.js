@@ -1,5 +1,5 @@
 module.exports = async (bot) => {
-	bot.log.console('Downloading servers');
+	bot.log.info('Downloading servers');
 	if (bot.config.server_jars_api.toLowerCase() === 'papermc')
 		await require('../paper/download')(bot);
 	else
