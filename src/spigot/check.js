@@ -55,10 +55,10 @@ module.exports = async bot => {
 	// await page.waitForTimeout(bot.config.cloudflare_timeout);
 	try {
 		await page.waitForSelector('.spigot_colorOverlay');
-		await page.waitForTimeout(bot.config.navigation_delay);
 		bot.log.info('Loaded spigotmc.org! Saving screenshot as loaded.png...');
 		await page.screenshot({ path: 'loaded.png', fullPage: true });
-		
+		await page.waitForTimeout(bot.config.navigation_delay);
+
 		if(page.$('#pageLogin') !== null) {
 			bot.log.info('Found login page, attempting to log in...');
 			// await page.waitForNavigation();
