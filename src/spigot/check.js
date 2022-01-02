@@ -59,7 +59,7 @@ module.exports = async bot => {
 		await page.screenshot({ path: 'loaded.png', fullPage: true });
 		await page.waitForTimeout(bot.config.navigation_delay);
 
-		if(page.$('#pageLogin') !== null) {
+		if(page.url().endsWith('login')) {
 			bot.log.info('Found login page, attempting to log in...');
 			// await page.waitForNavigation();
 		
@@ -88,6 +88,8 @@ module.exports = async bot => {
 			} else {
 				bot.log.info('Skipping authentication');
 			}
+		} else {
+			bot.log.info('Already logged in!');
 		}
 	} catch (e) {
 		bot.log.info('Screenshotting as error.png');
