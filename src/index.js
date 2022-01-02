@@ -37,7 +37,7 @@ class Bot extends DiscordClient {
 			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] 
 		});
 		
-		this.log = { console: console.log };
+		this.log.console = console.log;
 
 		this.utils = require('./utils/discord');
 		this.utils.init(this);
