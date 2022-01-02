@@ -98,6 +98,8 @@ module.exports = async bot => {
 	}
 		
 	for (const p in plugins) {
+		bot.log.info(`Checking '${plugins[p].jar}'`);
+
 		await page.waitForTimeout(bot.config.navigation_delay);
 		await page.goto(`https://www.spigotmc.org/resources/${plugins[p].resource}/updates`);
 		await page.waitForSelector('.downloadButton > a');

@@ -120,6 +120,7 @@ module.exports = async bot => {
 	}
 
 	for (const p in plugins) {
+		bot.log.info(`Updating download for '${plugins[p].jar}'`);
 		await page.waitForTimeout(bot.config.navigation_delay);
 		let plugin = await bot.db.Plugins.findOne({
 			where: {
