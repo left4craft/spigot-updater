@@ -32,7 +32,8 @@ module.exports = async bot => {
 			args: [
 				bot.config.no_sandbox_browser ? '--no-sandbox' : '',
 				PROXY ? '--proxy-server=' + PROXY : ''
-			]
+			],
+			userDataDir: 'data/sessioninfo/'
 		});
 	} else {
 		browser = await puppeteer.launch({
@@ -40,7 +41,8 @@ module.exports = async bot => {
 			args: [
 				bot.config.no_sandbox_browser ? '--no-sandbox' : '',
 				PROXY ? '--proxy-server=' + PROXY : ''
-			]
+			],
+			userDataDir: 'data/sessioninfo/'
 		});
 	}
 
@@ -52,40 +54,45 @@ module.exports = async bot => {
 	await page.goto('https://www.spigotmc.org/login');
 	// await page.waitForTimeout(bot.config.cloudflare_timeout);
 	try {
-		await page.waitForSelector('#ctrl_pageLogin_login');
+		await page.waitForSelector('.spigot_colorOverlay');
+		await page.waitForTimeout(bot.config.navigation_delay);
+		bot.log.info('Loaded spigotmc.org! Saving screenshot as loaded.png...');
+		await page.screenshot({ path: 'loaded.png', fullPage: true });
+		
+		if(page.$('#pageLogin') !== null) {
+			bot.log.info('Found login page, attempting to log in...');
+			// await page.waitForNavigation();
+		
+			const {
+				SPIGOT_EMAIL,
+				SPIGOT_PASSWORD
+			} = process.env;
+			if (SPIGOT_EMAIL && SPIGOT_PASSWORD) {
+				bot.log.info('Logging into SpigotMC');
+				try {
+					await page.type('#ctrl_pageLogin_login', SPIGOT_EMAIL);
+				} catch (e) {
+					return bot.log.error(e);
+				}
+				await page.keyboard.press('Tab');
+				await page.keyboard.type(SPIGOT_PASSWORD);
+				await page.keyboard.press('Tab');
+				await page.keyboard.press('Enter');
+				try {
+					await page.waitForNavigation();
+				} catch (e) {
+					bot.log.error(e);
+				}
+				bot.log.info('Logged in, screenshot saved as authenticated.png');
+				await page.screenshot({ path: 'authenticated.png', fullPage: true });
+			} else {
+				bot.log.info('Skipping authentication');
+			}
+		}
 	} catch (e) {
 		bot.log.info('Screenshotting as error.png');
 		await page.screenshot({ path: 'error.png', fullPage: true });
 		return bot.log.error(e);
-	}
-	bot.log.info('Found login page! Saving as loaded.png');
-	// await page.waitForNavigation();
-	await page.screenshot({ path: 'loaded.png', fullPage: true });
-	await page.waitForTimeout(bot.config.navigation_delay);
-
-	const {
-		SPIGOT_EMAIL,
-		SPIGOT_PASSWORD
-	} = process.env;
-	if (SPIGOT_EMAIL && SPIGOT_PASSWORD) {
-		bot.log.info('Logging into SpigotMC');
-		try {
-			await page.type('#ctrl_pageLogin_login', SPIGOT_EMAIL);
-		} catch (e) {
-			return bot.log.error(e);
-		}
-		await page.keyboard.press('Tab');
-		await page.keyboard.type(SPIGOT_PASSWORD);
-		await page.keyboard.press('Tab');
-		await page.keyboard.press('Enter');
-		try {
-			await page.waitForNavigation();
-		} catch (e) {
-			bot.log.error(e);
-		}
-		await page.screenshot({ path: 'authenticated.png', fullPage: true });
-	} else {
-		bot.log.info('Skipping authentication');
 	}
 		
 	for (const p in plugins) {
