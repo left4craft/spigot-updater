@@ -45,6 +45,7 @@ module.exports = async bot => {
 	}
 
 	const page = await browser.newPage();
+	await page.setDefaultTimeout(bot.config.cloudflare_timeout);
 	await page.setDefaultNavigationTimeout(bot.config.cloudflare_timeout);
 
 	bot.log.info('Loading spigotmc.org (waiting for Cloudflare)');
