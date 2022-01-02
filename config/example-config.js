@@ -7,6 +7,7 @@ module.exports = {
 	headless_browser: true,
 	no_sandbox_browser: false, // only change to true if you are getting errors or using docker
 	cloudflare_timeout: 300000, // time to wait to pass cloudflare Javascript challenge
+	navigation_delay: 10000, // delay between navigating spigotmc pages
 	download_time: 10000, // 10-15 seconds recommended, 5 seconds for Cloudflare
 	save_logs: true,
 	debug: false,
