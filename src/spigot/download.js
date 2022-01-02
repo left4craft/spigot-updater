@@ -143,7 +143,8 @@ module.exports = async bot => {
 			bot.log.info(`Downloading ${p} (${version}): plugins/${plugins[p].jar}`);
 			await page.goto(url);
 		} catch (e) {
-			// bot.log.error(e); // it doesn't like downloading
+			bot.log.info('Download error: ');
+			bot.log.error(e); // it doesn't like downloading
 			continue;
 		}
 
