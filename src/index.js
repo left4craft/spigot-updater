@@ -28,12 +28,13 @@ fs.readdir(path('data/'), (err, items) => {
 	}	
 });
 
-const { Client: DiscordClient } = require('discord.js');
+const { Client: DiscordClient, Intents } = require('discord.js');
 // ✅❌⚠️❗🆕
 class Bot extends DiscordClient {
 	constructor() {
 		super({
 			autoReconnect: true,
+			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] 
 		});
 		
 		this.utils = require('./utils/discord');
