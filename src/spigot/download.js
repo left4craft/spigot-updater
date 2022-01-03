@@ -129,57 +129,63 @@ module.exports = async bot => {
 
 	for (const p in plugins) {
 		bot.log.info(`Updating download for '${plugins[p].jar}'`);
-		let plugin = await bot.db.Plugins.findOne({
-			where: {
-				name: p
-			}
-		});
-
-		if (!plugin) continue;
-		if (plugin.get('downloaded') === plugin.get('approved')) continue;
-
-		if (fs.existsSync(path(`data/plugins/${plugins[p].jar}`)))
-			fs.unlinkSync(path(`data/plugins/${plugins[p].jar}`));
-
-
-		let version = plugin.get('approved');
-
-		let url = `https://www.spigotmc.org/resources/${plugins[p].resource}/download?version=${version}`;
 
 		try {
-			await page.waitForTimeout(bot.config.navigation_delay);
-			bot.log.info(`Downloading ${p} (${version}): plugins/${plugins[p].jar}`);
-			await page.goto(url);
+			let plugin = await bot.db.Plugins.findOne({
+				where: {
+					name: p
+				}
+			});
+	
+			if (!plugin) continue;
+			if (plugin.get('downloaded') === plugin.get('approved')) continue;
+	
+			if (fs.existsSync(path(`data/plugins/${plugins[p].jar}`)))
+				fs.unlinkSync(path(`data/plugins/${plugins[p].jar}`));
+	
+	
+			let version = plugin.get('approved');
+	
+			let url = `https://www.spigotmc.org/resources/${plugins[p].resource}/download?version=${version}`;
+	
+			try {
+				await page.waitForTimeout(bot.config.navigation_delay);
+				bot.log.info(`Downloading ${p} (${version}): plugins/${plugins[p].jar}`);
+				await page.goto(url);
+			} catch (e) {
+				// bot.log.info('Download error: ');
+				// bot.log.error(e); // it doesn't like downloading
+			}
+	
+			await page.waitForTimeout(bot.config.download_time);
+	
+			let temp = fs.readdirSync(path('data/temp/'));
+			if (temp.length < 1) {
+				bot.log.warn(`Failed to download ${p}`);
+				continue;
+			}
+	
+			let file = temp[0];
+	
+			if (plugins[p].zip_path && file.toLowerCase().endsWith('.zip')) {
+				bot.log.info('Extracting...');
+				await unzip(
+					plugins[p].zip_path,
+					path(`data/temp/${file}`),
+					path(`data/plugins/${plugins[p].jar}`)
+				);
+				fs.unlinkSync(path(`data/temp/${file}`));
+			} else {
+				fs.renameSync(path(`data/temp/${file}`), path(`data/plugins/${plugins[p].jar}`));
+			}
+	
+			plugin = await plugin.update({
+				downloaded: version
+			});	
 		} catch (e) {
-			// bot.log.info('Download error: ');
-			// bot.log.error(e); // it doesn't like downloading
+			bot.log.warn('Could not download plugin!')
+			bot.log.error(e);
 		}
-
-		await page.waitForTimeout(bot.config.download_time);
-
-		let temp = fs.readdirSync(path('data/temp/'));
-		if (temp.length < 1) {
-			bot.log.warn(`Failed to download ${p}`);
-			continue;
-		}
-
-		let file = temp[0];
-
-		if (plugins[p].zip_path && file.toLowerCase().endsWith('.zip')) {
-			bot.log.info('Extracting...');
-			await unzip(
-				plugins[p].zip_path,
-				path(`data/temp/${file}`),
-				path(`data/plugins/${plugins[p].jar}`)
-			);
-			fs.unlinkSync(path(`data/temp/${file}`));
-		} else {
-			fs.renameSync(path(`data/temp/${file}`), path(`data/plugins/${plugins[p].jar}`));
-		}
-
-		plugin = await plugin.update({
-			downloaded: version
-		});
 	}
 
 	bot.log.info('Closing browser');

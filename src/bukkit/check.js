@@ -53,73 +53,78 @@ module.exports = async bot => {
 	for (const p in plugins) {
 		bot.log.info(`Checking '${plugins[p].jar}'`);
 
-		await page.waitForTimeout(bot.config.navigation_delay);
+		try {
+			await page.waitForTimeout(bot.config.navigation_delay);
 
-		let url = plugins[p].url
-		if(url[url.length - 1] !== '/') url += '/';
-		await page.goto(plugins[p].url + 'files');
-		
-		await page.waitForSelector('.project-file-download-button > a');
-
-		let latest;
-		try {	
-			// eslint-disable-next-line no-undef
-			const url = await page.evaluate(() => document.querySelector('.project-file-download-button > a').href);
-			const parts = url.split('/');
-			latest = parts[parts.length - 2]; // subtract 2 for next to last element bc zero indexed
-			if (!latest) {
-				bot.log.warn(`Couldn't find a version number for ${p}`);
-				continue;
+			let url = plugins[p].url
+			if(url[url.length - 1] !== '/') url += '/';
+			await page.goto(plugins[p].url + 'files');
+			
+			await page.waitForSelector('.project-file-download-button > a');
+	
+			let latest;
+			try {	
+				// eslint-disable-next-line no-undef
+				const url = await page.evaluate(() => document.querySelector('.project-file-download-button > a').href);
+				const parts = url.split('/');
+				latest = parts[parts.length - 2]; // subtract 2 for next to last element bc zero indexed
+				if (!latest) {
+					bot.log.warn(`Couldn't find a version number for ${p}`);
+					continue;
+				}
+			} catch (e) {
+				bot.log.error(e);
 			}
+	
+			let plugin = await bot.db.Plugins.findOne({
+				where: {
+					name: p
+				}
+			});
+	
+			if (!plugin) {
+				plugin = await bot.db.Plugins.create({
+					name: p
+				});
+			}
+	
+			if (plugin.get('approved') === latest) continue;
+	
+			// there is a new version
+	
+			bot.log.info(`Found an update for '${plugins[p].jar}'`);
+	
+			await plugin.update({
+				latest: latest,
+			});
+	
+			let affected = Object.keys(bot.config.servers)
+				.filter(s => bot.config.servers[s].plugins.includes(p))
+				.map(s => `\`${s}\``)
+				.join(', ');
+	
+	
+			let msg = await bot.channel.send({
+				// new bot.Embed()
+				embeds: [bot.utils.createEmbed()
+					.setColor('ORANGE')
+					.setTitle(`🆕 A new version of ${p} is available`)
+					.setDescription('React with ✅ to approve this update and add it to the queue.')
+					.addField('Changelog', `[View updates on SpigotMC](https://www.spigotmc.org/resources/${plugins[p].resource}/updates)`)
+					.addField('Affected servers', `Servers using this plugin:\n${affected}`)
+					.setFooter(`SpigotMC version ${latest}`)]
+			});
+			msg.react('✅');
+			bot.messages.set(msg.id, {
+				plugin: {
+					name: p,
+					version: latest,
+				}
+			});		
 		} catch (e) {
+			bot.log.warn('Could not check plugin!')
 			bot.log.error(e);
 		}
-
-		let plugin = await bot.db.Plugins.findOne({
-			where: {
-				name: p
-			}
-		});
-
-		if (!plugin) {
-			plugin = await bot.db.Plugins.create({
-				name: p
-			});
-		}
-
-		if (plugin.get('approved') === latest) continue;
-
-		// there is a new version
-
-		bot.log.info(`Found an update for '${plugins[p].jar}'`);
-
-		await plugin.update({
-			latest: latest,
-		});
-
-		let affected = Object.keys(bot.config.servers)
-			.filter(s => bot.config.servers[s].plugins.includes(p))
-			.map(s => `\`${s}\``)
-			.join(', ');
-
-
-		let msg = await bot.channel.send({
-			// new bot.Embed()
-			embeds: [bot.utils.createEmbed()
-				.setColor('ORANGE')
-				.setTitle(`🆕 A new version of ${p} is available`)
-				.setDescription('React with ✅ to approve this update and add it to the queue.')
-				.addField('Changelog', `[View updates on SpigotMC](https://www.spigotmc.org/resources/${plugins[p].resource}/updates)`)
-				.addField('Affected servers', `Servers using this plugin:\n${affected}`)
-				.setFooter(`SpigotMC version ${latest}`)]
-		});
-		msg.react('✅');
-		bot.messages.set(msg.id, {
-			plugin: {
-				name: p,
-				version: latest,
-			}
-		});	
 		
 	}
 
