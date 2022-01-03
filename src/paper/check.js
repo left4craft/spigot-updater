@@ -64,7 +64,7 @@ module.exports = async bot => {
 				// new bot.Embed()
 				embeds: [bot.utils.createEmbed()
 					.setColor('ORANGE')
-					.setTitle(`🆕 A new build of ${data.project_name} ${latest.version} is available (${jar.get('latest_build') || 0} -> ${latest.build})`)
+					.setTitle(`🆕 A new build of ${data.project_name} ${latest.version} is available (${jar.get('approved_build') || 0} -> ${latest.build})`)
 					.setDescription('React with ✅ to approve this update and add it to the queue.')
 					.addField('Changelog', 'Click commit summaries for more details.\n' + changes)
 					.addField('Affected servers', `Servers using ${data.project_name} ${v}:\n${affected}`)
