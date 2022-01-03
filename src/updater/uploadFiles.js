@@ -39,17 +39,19 @@ module.exports = async (bot) => {
 		});
 
 		// an array of plugins that this server uses which need to be uploaded
-		let plugins = await bot.config.servers[server].plugins
-			.filter(async p => {
-				let plugin = await bot.db.Plugins.findOne({
-					where: {
-						name: p
-					}
-				});
-				if (!plugin || plugin.get('downloaded') === null) return false;
-				let current = JSON.parse(s.get('plugins'))[p];
-				return current !== plugin.get('downloaded');
+		let plugins = await bot.config.servers[server].plugins;
+		for(let i = 0; i < plugins.length; i = i + 1) {
+			let p = plugins[i];
+			if(p === undefined) continue;
+			let plugin = await bot.db.Plugins.findOne({
+				where: {
+					name: p
+				}
 			});
+			if (!plugin || plugin.get('downloaded') === null || JSON.parse(s.get('plugins'))[p] === plugin.get('downloaded')) {
+				plugins.splice(i, 1);
+			}
+		}
 	
 		let jar_needs_updating = s.get('current') !== sjar.get('downloaded');
 		if (plugins.length < 1 && !jar_needs_updating) { // if no plugins, and server jar is up to date
