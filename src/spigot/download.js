@@ -17,7 +17,7 @@ module.exports = async bot => {
 	}
 
 	let plugins = {};
-	Object.keys(bot.config.plugins)
+	await Object.keys(bot.config.plugins)
 		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'spigot')
 		.filter(async plugin => {
 			let p = await bot.db.Plugins.findOne({
@@ -124,7 +124,6 @@ module.exports = async bot => {
 
 	for (const p in plugins) {
 		bot.log.info(`Updating download for '${plugins[p].jar}'`);
-		await page.waitForTimeout(bot.config.navigation_delay);
 		let plugin = await bot.db.Plugins.findOne({
 			where: {
 				name: p
@@ -143,6 +142,7 @@ module.exports = async bot => {
 		let url = `https://www.spigotmc.org/resources/${plugins[p].resource}/download?version=${version}`;
 
 		try {
+			await page.waitForTimeout(bot.config.navigation_delay);
 			bot.log.info(`Downloading ${p} (${version}): plugins/${plugins[p].jar}`);
 			await page.goto(url);
 		} catch (e) {

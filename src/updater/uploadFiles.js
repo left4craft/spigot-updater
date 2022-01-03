@@ -39,7 +39,7 @@ module.exports = async (bot) => {
 		});
 
 		// an array of plugins that this server uses which need to be uploaded
-		let plugins = bot.config.servers[server].plugins
+		let plugins = await bot.config.servers[server].plugins
 			.filter(async p => {
 				let plugin = await bot.db.Plugins.findOne({
 					where: {
@@ -106,7 +106,6 @@ module.exports = async (bot) => {
 		}, 60000); */
 
 		collector.on('collect', async (r, u) => {
-			bot.log.info('Reaction has been collected!');
 			if(u.id === bot.user.id) return; // ignore reactions from the bot itself
 			
 			collector.stop();
