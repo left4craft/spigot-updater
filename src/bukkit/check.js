@@ -110,9 +110,9 @@ module.exports = async bot => {
 					.setColor('ORANGE')
 					.setTitle(`🆕 A new version of ${p} is available`)
 					.setDescription('React with ✅ to approve this update and add it to the queue.')
-					.addField('Changelog', `[View updates on SpigotMC](https://www.spigotmc.org/resources/${plugins[p].resource}/updates)`)
+					.addField('Changelog', `[View updates on Bukkit](${url}files/${latest})`)
 					.addField('Affected servers', `Servers using this plugin:\n${affected}`)
-					.setFooter(`SpigotMC version ${latest}`)]
+					.setFooter(`Bukkit version ${latest}`)]
 			});
 			msg.react('✅');
 			bot.messages.set(msg.id, {
