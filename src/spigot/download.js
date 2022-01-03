@@ -67,6 +67,9 @@ module.exports = async bot => {
 	await page.setDefaultTimeout(bot.config.cloudflare_timeout);
 	await page.setDefaultNavigationTimeout(bot.config.cloudflare_timeout);
 
+	// auto continue all requests to stop console error spam
+	page.on('request', request => Promise.resolve().then(() => request.continue()).catch(() => {}));
+
 	await page._client.send('Page.setDownloadBehavior', {
 		behavior: 'allow',
 		downloadPath: path('data/temp/')

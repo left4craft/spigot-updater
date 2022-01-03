@@ -34,7 +34,7 @@ class Bot extends DiscordClient {
 	constructor() {
 		super({
 			autoReconnect: true,
-			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] 
+			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGE_REACTIONS , Intents.FLAGS.GUILD_MESSAGES] 
 		});
 
 		this.utils = require('./utils/discord');

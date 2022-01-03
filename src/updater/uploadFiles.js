@@ -106,6 +106,7 @@ module.exports = async (bot) => {
 		}, 60000); */
 
 		collector.on('collect', async (r, u) => {
+			bot.log.info('Reaction has been collected!');
 			collector.stop();
 			if (r.emoji.name === '❌') {
 				dismissed = u;

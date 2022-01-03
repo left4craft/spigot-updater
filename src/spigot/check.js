@@ -50,6 +50,9 @@ module.exports = async bot => {
 	await page.setDefaultTimeout(bot.config.cloudflare_timeout);
 	await page.setDefaultNavigationTimeout(bot.config.cloudflare_timeout);
 
+	// auto continue all requests to stop console error spam
+	page.on('request', request => Promise.resolve().then(() => request.continue()).catch(() => {}));
+
 	bot.log.info('Loading spigotmc.org (waiting for Cloudflare)');
 	await page.goto('https://www.spigotmc.org/login');
 	// await page.waitForTimeout(bot.config.cloudflare_timeout);
