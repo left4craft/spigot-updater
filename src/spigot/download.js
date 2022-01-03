@@ -16,7 +16,8 @@ module.exports = async bot => {
 		fs.unlinkSync(path('data/temp/' + file));
 	}
 
-	let plugin_names = bot.config.plugins
+
+	let plugin_names = Object.keys(bot.config.plugins)
 		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'spigot');
 	for(let i = 0; i < plugin_names.length; i = i + 1) {
 		let plugin = plugin_names[i];
