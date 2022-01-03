@@ -54,7 +54,11 @@ module.exports = async bot => {
 		bot.log.info(`Checking '${plugins[p].jar}'`);
 
 		await page.waitForTimeout(bot.config.navigation_delay);
-		await page.goto(plugins[p].url);
+
+		let url = plugins[p].url
+		if(url[url.length - 1] !== '/') url += '/';
+		await page.goto(plugins[p].url + 'files');
+		
 		await page.waitForSelector('.project-file-download-button > a');
 
 		let latest;
