@@ -99,7 +99,7 @@ module.exports = async bot => {
 	
 			let version = plugin.get('approved');
 	
-			let url = `https://dev.bukkit.org/projects/grief-prevention/files/${version}/download`;
+			let url = `${url}files/${version}/download`;
 	
 			try {
 				await page.waitForTimeout(bot.config.navigation_delay);
