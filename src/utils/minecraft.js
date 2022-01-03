@@ -14,7 +14,7 @@ module.exports = {
 					port = Number(host[1]);
 
 				minecraft.status(ip, port).then(data => {
-					resolve(data.onlinePlayers);
+					resolve(data.players.online);
 				}).catch(e => {
 					bot.log.warn(`Failed to get player count for ${server} server`);
 					bot.log.error(e);
