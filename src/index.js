@@ -23,7 +23,7 @@ fs.readdir(path('data/'), (err, items) => {
 	for (let d of directories) {
 		if (!items.includes(d)) {
 			fs.mkdirSync(path('data/' + d));
-			log.console(`${capitalise(d)} directory not found, creating it for you...`);
+			log.info(`${capitalise(d)} directory not found, creating it for you...`);
 		}
 	}	
 });
@@ -100,7 +100,7 @@ class Bot extends DiscordClient {
 					approved_checksum: data.checksum,
 				});
 
-				this.log.console(`${u.username} approved an update for ${capitalise(data.type)} ${data.version}`);
+				this.log.info(`${u.username} approved an update for ${capitalise(data.type)} ${data.version}`);
 
 				await m.reactions.removeAll();
 
@@ -124,7 +124,7 @@ class Bot extends DiscordClient {
 					approved: data.version,
 				});
 
-				this.log.console(`${u.username} approved an update for ${data.name}`);
+				this.log.info(`${u.username} approved an update for ${data.name}`);
 
 				await m.reactions.removeAll();
 
