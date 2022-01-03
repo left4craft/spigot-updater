@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path')
 const fetch = require('node-fetch');
 const FormData = require('form-data');
 
@@ -56,7 +55,7 @@ class HTTP {
 	uploadFiles(endpoint, files) {
 		const form = new FormData();
 		for (let f of files) {
-			if(!path.existsSync(f)) {
+			if(!fs.existsSync(f)) {
 				console.log(`Warning: path ${f} does not exist!`)
 				continue
 			}
