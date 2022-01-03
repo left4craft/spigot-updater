@@ -31,7 +31,7 @@ module.exports = async bot => {
 			});
 		}
 
-		if (plugin.get('latest') == latest.number) continue; // one is a string and the other in a number
+		if (plugin.get('approved') == latest.number) continue; // one is a string and the other in a number
 
 		// there is a new version
 

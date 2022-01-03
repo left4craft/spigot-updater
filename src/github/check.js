@@ -27,7 +27,7 @@ module.exports = async bot => {
 			});
 		}
 
-		if (plugin.get('latest') === data.tag_name) continue;
+		if (plugin.get('approved') === data.tag_name) continue;
 
 		// there is a new version
 

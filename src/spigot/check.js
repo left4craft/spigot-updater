@@ -132,7 +132,7 @@ module.exports = async bot => {
 			});
 		}
 
-		if (plugin.get('latest') === latest) continue;
+		if (plugin.get('approved') === latest) continue;
 
 		// there is a new version
 

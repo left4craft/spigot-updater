@@ -46,7 +46,7 @@ module.exports = async (bot) => {
 						name: p
 					}
 				});
-				if (!plugin) return;
+				if (!plugin || plugin.get('downloaded') === null) return;
 				let current = JSON.parse(s.get('plugins'))[p];
 				return current !== plugin.get('downloaded');
 			});
