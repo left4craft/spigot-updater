@@ -57,6 +57,7 @@ class HTTP {
 		const form = new FormData();
 		for (let f of files) {
 			if(!path.existsSync(f)) {
+				console.log(`Warning: path ${f} does not exist!`)
 				continue
 			}
 			form.append('files', fs.createReadStream(f));
