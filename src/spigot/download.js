@@ -29,6 +29,7 @@ module.exports = async bot => {
 		});
 		if (!p || p.get('downloaded') === p.get('approved')) {
 			plugin_names.splice(i, 1);
+			i -= 1;
 		}
 	}
 	let plugins = {};

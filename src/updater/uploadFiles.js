@@ -50,6 +50,7 @@ module.exports = async (bot) => {
 			});
 			if (!plugin || plugin.get('downloaded') === null || JSON.parse(s.get('plugins'))[p] === plugin.get('downloaded')) {
 				plugins.splice(i, 1);
+				i -= 1;
 			}
 		}
 	
