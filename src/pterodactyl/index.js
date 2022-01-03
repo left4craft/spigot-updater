@@ -77,7 +77,7 @@ class Pterodactyl {
 		let endpoint = `${this.client}/servers/${server}/files/upload`;
 		let response = await this.http.getJSON(endpoint); // make GET request
 		response = await response.json();
-
+		console.log(response);
 		let url = new URL(response.attributes.url); // create a URL object from the string
 		let params = new URLSearchParams(url.search); // create a URLSearchParams object from the URL's params string
 		params.set('directory', path); // set the directory param
