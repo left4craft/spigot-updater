@@ -1,9 +1,9 @@
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
+// const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
 
 puppeteer.use(StealthPlugin());
-puppeteer.use(AdblockerPlugin());
+// puppeteer.use(AdblockerPlugin());
 
 module.exports = async bot => {
 
@@ -50,8 +50,8 @@ module.exports = async bot => {
 	await page.setDefaultTimeout(bot.config.cloudflare_timeout);
 	await page.setDefaultNavigationTimeout(bot.config.cloudflare_timeout);
 
-	// auto continue all requests to stop console error spam
-	page.on('request', request => Promise.resolve().then(() => request.continue()).catch(() => {}));
+	// // auto continue all requests to stop console error spam
+	// page.on('request', request => Promise.resolve().then(() => request.continue()).catch(() => {}));
 
 	bot.log.info('Loading spigotmc.org (waiting for Cloudflare)');
 	await page.goto('https://www.spigotmc.org/login');
