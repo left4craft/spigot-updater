@@ -26,6 +26,7 @@ module.exports = async (bot) => {
 	
 	bot.log.info('Checking for plugin updates');
 	await require('../spigot/check')(bot);
+	await require('../bukkit/check')(bot);
 	await require('../github/check')(bot);
 	await require('../jenkins/check')(bot);
 };
