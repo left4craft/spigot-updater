@@ -34,7 +34,7 @@ module.exports = async bot => {
 	let plugins = {};
 	plugin_names.forEach(name => plugins[name] = bot.config.plugins[name]);
 
-	if (plugins.length < 1)
+	if (plugin_names.length < 1)
 		return bot.log.info('No spigot plugins need to be downloaded, skipping spigot browser');
 
 	bot.log.info('Starting browser');
