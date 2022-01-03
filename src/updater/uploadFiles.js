@@ -149,7 +149,9 @@ module.exports = async (bot) => {
 					plugins: JSON.stringify(data)
 				});
 	
-				let jars = plugins.map(p => path(`data/plugins/${bot.config.plugins[p].jar}`));
+				let jars = plugins
+					.filter(p => bot.config.plugins[p] !== undefined)
+					.map(p => path(`data/plugins/${bot.config.plugins[p].jar}`));
 				bot.log.info(`Uploading ${plugins.length} plugins for ${server}`);
 				panel.upload(ID, '/plugins/', jars); // upload the files
 			}

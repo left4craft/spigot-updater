@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path')
 const fetch = require('node-fetch');
 const FormData = require('form-data');
 
@@ -54,8 +55,12 @@ class HTTP {
 	 */
 	uploadFiles(endpoint, files) {
 		const form = new FormData();
-		for (let f of files)
+		for (let f of files) {
+			if(!path.existsSync(f)) {
+				continue
+			}
 			form.append('files', fs.createReadStream(f));
+		}
 		return fetch(endpoint, {
 			method: 'POST',
 			body: form,
