@@ -16,10 +16,10 @@ module.exports = async bot => {
 		fs.unlinkSync(path('data/temp/' + file));
 	}
 
-	let plugins = bot.config.plugins
+	let plugin_names = bot.config.plugins
 		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'spigot');
-	for(let i = 0; i < plugins.length; i = i + 1) {
-		let plugin = plugins[i];
+	for(let i = 0; i < plugin_names.length; i = i + 1) {
+		let plugin = plugin_names[i];
 		if(plugin === undefined) continue;
 		let p = await bot.db.Plugins.findOne({
 			where: {
@@ -27,10 +27,12 @@ module.exports = async bot => {
 			}
 		});
 		if (!p || p.get('downloaded') === p.get('approved')) {
-			plugins.splice(i, 1);
+			plugin_names.splice(i, 1);
 		}
 	}
-	
+	let plugins = {};
+	plugin_names.forEach(name => plugins[name] = bot.config.plugins[name]);
+
 	if (plugins.length < 1)
 		return bot.log.info('No spigot plugins need to be downloaded, skipping spigot browser');
 
