@@ -54,8 +54,13 @@ class HTTP {
 	 */
 	uploadFiles(endpoint, files) {
 		const form = new FormData();
-		for (let f of files)
+		for (let f of files) {
+			if(!fs.existsSync(f)) {
+				console.log(`Warning: path ${f} does not exist!`)
+				continue
+			}
 			form.append('files', fs.createReadStream(f));
+		}
 		return fetch(endpoint, {
 			method: 'POST',
 			body: form,

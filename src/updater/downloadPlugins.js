@@ -6,7 +6,15 @@ module.exports = async (bot) => {
 		console.warn('Error downloading from spigot');
 		console.error(e);
 	}
-	
+
+	try {
+		await require('../bukkit/download')(bot);
+	} catch (e) {
+		console.warn('Error downloading from github');
+		console.error(e);
+	}
+
+
 	try {
 		await require('../github/download')(bot);
 	} catch (e) {

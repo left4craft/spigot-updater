@@ -47,9 +47,9 @@ module.exports = async bot => {
 				});
 			}
 
-			if (jar.get('latest_build') == latest.build) continue;
+			if (jar.get('approved_build') == latest.build) continue;
 
-			bot.log.info(`Found an update for ${data.project_name} ${v} (${jar.get('latest_build') || 0} -> ${latest.build})`);
+			bot.log.info(`Found an update for ${data.project_name} ${v} (${jar.get('approved_build') || 0} -> ${latest.build})`);
 
 			let affected = Object.keys(bot.config.servers)
 				.filter(s => bot.config.servers[s].jar.type === p && bot.config.servers[s].jar.version === v)
@@ -64,7 +64,7 @@ module.exports = async bot => {
 				// new bot.Embed()
 				embeds: [bot.utils.createEmbed()
 					.setColor('ORANGE')
-					.setTitle(`🆕 A new build of ${data.project_name} ${latest.version} is available (${jar.get('latest_build') || 0} -> ${latest.build})`)
+					.setTitle(`🆕 A new build of ${data.project_name} ${latest.version} is available (${jar.get('approved_build') || 0} -> ${latest.build})`)
 					.setDescription('React with ✅ to approve this update and add it to the queue.')
 					.addField('Changelog', 'Click commit summaries for more details.\n' + changes)
 					.addField('Affected servers', `Servers using ${data.project_name} ${v}:\n${affected}`)

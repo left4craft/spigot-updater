@@ -55,6 +55,7 @@ class Bot extends DiscordClient {
 
 		this.on('ready', async () => {
 			this.log.success(`Authenticated as ${this.user.tag}`);
+			this.log.success('Connected to Discord API')
 
 			this.channel = this.channels.cache.get(this.config.channel_id);
 			if (!this.channel)

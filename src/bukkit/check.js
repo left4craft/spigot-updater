@@ -9,13 +9,13 @@ module.exports = async bot => {
 
 	let plugins = {};
 	Object.keys(bot.config.plugins)
-		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'spigot')
+		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'bukkit')
 		.forEach(plugin => plugins[plugin] = bot.config.plugins[plugin]);
 
 	if (plugins.length < 1)
-		return bot.log.info('No spigot plugins need to be checked, skipping spigot browser');
+		return bot.log.info('No bukkit plugins need to be checked, skipping bukkit browser');
 
-	bot.log.info('Checking for updates for plugins on SpigotMC');
+	bot.log.info('Checking for updates for plugins on bukkit');
 	bot.log.info('Starting browser');
 
 	const {
@@ -49,70 +49,25 @@ module.exports = async bot => {
 	const page = await browser.newPage();
 	await page.setDefaultTimeout(bot.config.cloudflare_timeout);
 	await page.setDefaultNavigationTimeout(bot.config.cloudflare_timeout);
-
-	// // auto continue all requests to stop console error spam
-	// page.on('request', request => Promise.resolve().then(() => request.continue()).catch(() => {}));
-
-	bot.log.info('Loading spigotmc.org (waiting for Cloudflare)');
-	await page.goto('https://www.spigotmc.org/login');
-	// await page.waitForTimeout(bot.config.cloudflare_timeout);
-	try {
-		await page.waitForSelector('.spigot_colorOverlay');
-		bot.log.info('Loaded spigotmc.org! Saving screenshot as loaded.png...');
-		await page.waitForTimeout(bot.config.navigation_delay);
-		await page.screenshot({ path: 'loaded.png', fullPage: true });
-
-		if(page.url().endsWith('login')) {
-			bot.log.info('Found login page, attempting to log in...');
-			// await page.waitForNavigation();
-		
-			const {
-				SPIGOT_EMAIL,
-				SPIGOT_PASSWORD
-			} = process.env;
-			if (SPIGOT_EMAIL && SPIGOT_PASSWORD) {
-				bot.log.info('Logging into SpigotMC');
-				try {
-					await page.type('#ctrl_pageLogin_login', SPIGOT_EMAIL);
-				} catch (e) {
-					return bot.log.error(e);
-				}
-				await page.keyboard.press('Tab');
-				await page.keyboard.type(SPIGOT_PASSWORD);
-				await page.keyboard.press('Tab');
-				await page.keyboard.press('Enter');
-				try {
-					await page.waitForNavigation();
-				} catch (e) {
-					bot.log.error(e);
-				}
-				bot.log.info('Logged in, screenshot saved as authenticated.png');
-				await page.screenshot({ path: 'authenticated.png', fullPage: true });
-			} else {
-				bot.log.info('Skipping authentication');
-			}
-		} else {
-			bot.log.info('Already logged in!');
-		}
-	} catch (e) {
-		bot.log.info('Screenshotting as error.png');
-		await page.screenshot({ path: 'error.png', fullPage: true });
-		return bot.log.error(e);
-	}
 		
 	for (const p in plugins) {
 		bot.log.info(`Checking '${plugins[p].jar}'`);
 
 		try {
 			await page.waitForTimeout(bot.config.navigation_delay);
-			await page.goto(`https://www.spigotmc.org/resources/${plugins[p].resource}/updates`);
-			await page.waitForSelector('.downloadButton > a');
+
+			let url = plugins[p].url
+			if(url[url.length - 1] !== '/') url += '/';
+			await page.goto(plugins[p].url + 'files');
+			
+			await page.waitForSelector('.project-file-download-button > a');
 	
 			let latest;
 			try {	
 				// eslint-disable-next-line no-undef
-				const url = await page.evaluate(() => document.querySelector('.downloadButton > a').href);
-				latest = (new URL(url)).searchParams.get('version');
+				const url = await page.evaluate(() => document.querySelector('.project-file-download-button > a').href);
+				const parts = url.split('/');
+				latest = parts[parts.length - 2]; // subtract 2 for next to last element bc zero indexed
 				if (!latest) {
 					bot.log.warn(`Couldn't find a version number for ${p}`);
 					continue;
@@ -155,9 +110,9 @@ module.exports = async bot => {
 					.setColor('ORANGE')
 					.setTitle(`🆕 A new version of ${p} is available`)
 					.setDescription('React with ✅ to approve this update and add it to the queue.')
-					.addField('Changelog', `[View updates on SpigotMC](https://www.spigotmc.org/resources/${plugins[p].resource}/updates)`)
+					.addField('Changelog', `[View updates on Bukkit](${url}files/${latest})`)
 					.addField('Affected servers', `Servers using this plugin:\n${affected}`)
-					.setFooter(`SpigotMC version ${latest}`)]
+					.setFooter(`Bukkit version ${latest}`)]
 			});
 			msg.react('✅');
 			bot.messages.set(msg.id, {

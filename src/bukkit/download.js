@@ -18,7 +18,7 @@ module.exports = async bot => {
 
 
 	let plugin_names = Object.keys(bot.config.plugins)
-		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'spigot');
+		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'bukkit');
 	for(let i = 0; i < plugin_names.length; i = i + 1) {
 		let plugin = plugin_names[i];
 		if(plugin === undefined) continue;
@@ -36,7 +36,7 @@ module.exports = async bot => {
 	plugin_names.forEach(name => plugins[name] = bot.config.plugins[name]);
 
 	if (plugin_names.length < 1)
-		return bot.log.info('No spigot plugins need to be downloaded, skipping spigot browser');
+		return bot.log.info('No bukkit plugins need to be downloaded, skipping bukkit browser');
 
 	bot.log.info('Starting browser');
 
@@ -79,53 +79,6 @@ module.exports = async bot => {
 		behavior: 'allow',
 		downloadPath: path('data/temp/')
 	});
-	await page.waitForTimeout(bot.config.navigation_delay);
-	bot.log.info('Loading spigotmc.org (waiting for Cloudflare)');
-	await page.goto('https://www.spigotmc.org/login');
-	// await page.waitForTimeout(bot.config.cloudflare_timeout);
-	try {
-		await page.waitForSelector('.spigot_colorOverlay');
-		bot.log.info('Loaded spigotmc.org! Saving screenshot as loaded.png...');
-		await page.waitForTimeout(bot.config.navigation_delay);
-		await page.screenshot({ path: 'loaded.png', fullPage: true });
-
-		if(page.url().endsWith('login')) {
-			bot.log.info('Found login page, attempting to log in...');
-			// await page.waitForNavigation();
-		
-			const {
-				SPIGOT_EMAIL,
-				SPIGOT_PASSWORD
-			} = process.env;
-			if (SPIGOT_EMAIL && SPIGOT_PASSWORD) {
-				bot.log.info('Logging into SpigotMC');
-				try {
-					await page.type('#ctrl_pageLogin_login', SPIGOT_EMAIL);
-				} catch (e) {
-					return bot.log.error(e);
-				}
-				await page.keyboard.press('Tab');
-				await page.keyboard.type(SPIGOT_PASSWORD);
-				await page.keyboard.press('Tab');
-				await page.keyboard.press('Enter');
-				try {
-					await page.waitForNavigation();
-				} catch (e) {
-					bot.log.error(e);
-				}
-				bot.log.info('Logged in, screenshot saved as authenticated.png');
-				await page.screenshot({ path: 'authenticated.png', fullPage: true });
-			} else {
-				bot.log.info('Skipping authentication');
-			}
-		} else {
-			bot.log.info('Already logged in!');
-		}
-	} catch (e) {
-		bot.log.info('Screenshotting as error.png');
-		await page.screenshot({ path: 'error.png', fullPage: true });
-		return bot.log.error(e);
-	}
 
 	for (const p in plugins) {
 		bot.log.info(`Updating download for '${plugins[p].jar}'`);
@@ -146,7 +99,7 @@ module.exports = async bot => {
 	
 			let version = plugin.get('approved');
 	
-			let url = `https://www.spigotmc.org/resources/${plugins[p].resource}/download?version=${version}`;
+			let url = `${plugins[p].url}files/${version}/download`;
 	
 			try {
 				await page.waitForTimeout(bot.config.navigation_delay);
