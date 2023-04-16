@@ -9,6 +9,7 @@ data/servers
 # Files
 data/servers.json
 data/plugins.json
+data/sessioninfo
 .env
 /*.png
 config/config.js

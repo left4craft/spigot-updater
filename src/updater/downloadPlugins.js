@@ -1,14 +1,14 @@
-module.exports = async (bot) => {
-	bot.log.info('Downloading plugins');
+module.exports = async (updateapi) => {
+	updateapi.log.info('Downloading plugins');
 	try {
-		await require('../spigot/download')(bot);
+		await require('../spigot/download')(updateapi);
 	} catch (e) {
 		console.warn('Error downloading from spigot');
 		console.error(e);
 	}
 
 	try {
-		await require('../bukkit/download')(bot);
+		await require('../bukkit/download')(updateapi);
 	} catch (e) {
 		console.warn('Error downloading from github');
 		console.error(e);
@@ -16,14 +16,14 @@ module.exports = async (bot) => {
 
 
 	try {
-		await require('../github/download')(bot);
+		await require('../github/download')(updateapi);
 	} catch (e) {
 		console.warn('Error downloading from github');
 		console.error(e);
 	}
 
 	try {
-		await require('../jenkins/download')(bot);
+		await require('../jenkins/download')(updateapi);
 	} catch (e) {
 		console.warn('Error downloading from jenkins');
 		console.error(e);

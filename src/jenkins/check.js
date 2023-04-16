@@ -1,13 +1,13 @@
 const fetch = require('node-fetch');
 
-module.exports = async bot => {
+module.exports = async updateapi => {
 
-	bot.log.info('Checking for updates for plugins on Jenkins');
+	updateapi.log.info('Checking for updates for plugins on Jenkins');
 
 	let plugins = {};
-	Object.keys(bot.config.plugins)
-		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'jenkins')
-		.forEach(plugin => plugins[plugin] = bot.config.plugins[plugin]);
+	Object.keys(updateapi.plugins)
+		.filter(plugin => updateapi.plugins[plugin].source.toLowerCase() === 'jenkins')
+		.forEach(plugin => plugins[plugin] = updateapi.plugins[plugin]);
 
 	for (const p in plugins) {
 		let host = plugins[p].host;
@@ -19,14 +19,14 @@ module.exports = async bot => {
 		let latest = builds[0];
 		if (!latest) continue;
 
-		let plugin = await bot.db.Plugins.findOne({
+		let plugin = await updateapi.db.Plugins.findOne({
 			where: {
 				name: p
 			}
 		});
 
 		if (!plugin) {
-			plugin = await bot.db.Plugins.create({
+			plugin = await updateapi.db.Plugins.create({
 				name: p
 			});
 		}
@@ -35,35 +35,42 @@ module.exports = async bot => {
 
 		// there is a new version
 
-		bot.log.info(`Found an update for '${plugins[p].jar}'`);
+		updateapi.log.info(`Found an update for '${plugins[p].jar}'`);
 
-		await plugin.update({
-			latest: latest.number,
-		});
+		if(updateapi.config.auto_approve) {
+			await plugin.update({
+				approved: latest.number,
+				latest: latest.number,
+			});
+			updateapi.log.info(`Auto-approved update for '${plugins[p].jar}'`);
+		} else {
+			await plugin.update({
+				latest: latest.number,
+			});
+		}
+		// let affected = Object.keys(updateapi.servers)
+		// 	.filter(s => updateapi.servers[s].plugins.includes(p))
+		// 	.map(s => `\`${s}\``)
+		// 	.join(', ');
 
-		let affected = Object.keys(bot.config.servers)
-			.filter(s => bot.config.servers[s].plugins.includes(p))
-			.map(s => `\`${s}\``)
-			.join(', ');
 
-
-		let msg = await bot.channel.send({
-			// new bot.Embed()
-			embeds: [bot.utils.createEmbed()
-				.setColor('ORANGE')
-				.setTitle(`🆕 A new version of ${p} is available`)
-				.setDescription('React with ✅ to approve this update and add it to the queue.')
-				.addField('Changelog', `> [Summary & status](${latest.url})\n\n> [Full changes](${latest.url}changes)`)
-				.addField('Affected servers', `Servers using this plugin:\n${affected}`)
-				.setFooter(`${plugins[p].job} build ${latest.number}`)]
-		});
-		msg.react('✅');
-		bot.messages.set(msg.id, {
-			plugin: {
-				name: p,
-				version: latest.number,
-			}
-		});	
+		// let msg = await bot.channel.send({
+		// 	// new bot.Embed()
+		// 	embeds: [bot.utils.createEmbed()
+		// 		.setColor('ORANGE')
+		// 		.setTitle(`🆕 A new version of ${p} is available`)
+		// 		.setDescription('React with ✅ to approve this update and add it to the queue.')
+		// 		.addField('Changelog', `> [Summary & status](${latest.url})\n\n> [Full changes](${latest.url}changes)`)
+		// 		.addField('Affected servers', `Servers using this plugin:\n${affected}`)
+		// 		.setFooter(`${plugins[p].job} build ${latest.number}`)]
+		// });
+		// msg.react('✅');
+		// bot.messages.set(msg.id, {
+		// 	plugin: {
+		// 		name: p,
+		// 		version: latest.number,
+		// 	}
+		// });	
 
 	}
 };

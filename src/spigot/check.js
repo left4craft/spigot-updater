@@ -5,18 +5,18 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(StealthPlugin());
 // puppeteer.use(AdblockerPlugin());
 
-module.exports = async bot => {
+module.exports = async updateapi => {
 
 	let plugins = {};
-	Object.keys(bot.config.plugins)
-		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'spigot')
-		.forEach(plugin => plugins[plugin] = bot.config.plugins[plugin]);
+	Object.keys(updateapi.plugins)
+		.filter(plugin => updateapi.plugins[plugin].source.toLowerCase() === 'spigot')
+		.forEach(plugin => plugins[plugin] = updateapi.plugins[plugin]);
 
 	if (plugins.length < 1)
-		return bot.log.info('No spigot plugins need to be checked, skipping spigot browser');
+		return updateapi.log.info('No spigot plugins need to be checked, skipping spigot browser');
 
-	bot.log.info('Checking for updates for plugins on SpigotMC');
-	bot.log.info('Starting browser');
+	updateapi.log.info('Checking for updates for plugins on SpigotMC');
+	updateapi.log.info('Starting browser');
 
 	const {
 		PROXY,
@@ -27,19 +27,19 @@ module.exports = async bot => {
 
 	if(CHROMEPATH) {
 		browser = await puppeteer.launch({
-			headless: bot.config.headless_browser,
+			headless: updateapi.config.headless_browser,
 			executablePath: CHROMEPATH,
 			args: [
-				bot.config.no_sandbox_browser ? '--no-sandbox' : '',
+				updateapi.config.no_sandbox_browser ? '--no-sandbox' : '',
 				PROXY ? '--proxy-server=' + PROXY : ''
 			],
 			userDataDir: 'data/sessioninfo/'
 		});
 	} else {
 		browser = await puppeteer.launch({
-			headless: bot.config.headless_browser,
+			headless: updateapi.config.headless_browser,
 			args: [
-				bot.config.no_sandbox_browser ? '--no-sandbox' : '',
+				updateapi.config.no_sandbox_browser ? '--no-sandbox' : '',
 				PROXY ? '--proxy-server=' + PROXY : ''
 			],
 			userDataDir: 'data/sessioninfo/'
@@ -47,23 +47,23 @@ module.exports = async bot => {
 	}
 
 	const page = await browser.newPage();
-	await page.setDefaultTimeout(bot.config.cloudflare_timeout);
-	await page.setDefaultNavigationTimeout(bot.config.cloudflare_timeout);
+	await page.setDefaultTimeout(updateapi.config.cloudflare_timeout);
+	await page.setDefaultNavigationTimeout(updateapi.config.cloudflare_timeout);
 
 	// // auto continue all requests to stop console error spam
 	// page.on('request', request => Promise.resolve().then(() => request.continue()).catch(() => {}));
 
-	bot.log.info('Loading spigotmc.org (waiting for Cloudflare)');
+	updateapi.log.info('Loading spigotmc.org (waiting for Cloudflare)');
 	await page.goto('https://www.spigotmc.org/login');
-	// await page.waitForTimeout(bot.config.cloudflare_timeout);
+	// await page.waitForTimeout(updateapi.config.cloudflare_timeout);
 	try {
 		await page.waitForSelector('.spigot_colorOverlay');
-		bot.log.info('Loaded spigotmc.org! Saving screenshot as loaded.png...');
-		await page.waitForTimeout(bot.config.navigation_delay);
+		updateapi.log.info('Loaded spigotmc.org! Saving screenshot as loaded.png...');
+		await page.waitForTimeout(updateapi.config.navigation_delay);
 		await page.screenshot({ path: 'loaded.png', fullPage: true });
 
 		if(page.url().endsWith('login')) {
-			bot.log.info('Found login page, attempting to log in...');
+			updateapi.log.info('Found login page, attempting to log in...');
 			// await page.waitForNavigation();
 		
 			const {
@@ -71,11 +71,11 @@ module.exports = async bot => {
 				SPIGOT_PASSWORD
 			} = process.env;
 			if (SPIGOT_EMAIL && SPIGOT_PASSWORD) {
-				bot.log.info('Logging into SpigotMC');
+				updateapi.log.info('Logging into SpigotMC');
 				try {
 					await page.type('#ctrl_pageLogin_login', SPIGOT_EMAIL);
 				} catch (e) {
-					return bot.log.error(e);
+					return updateapi.log.error(e);
 				}
 				await page.keyboard.press('Tab');
 				await page.keyboard.type(SPIGOT_PASSWORD);
@@ -84,27 +84,27 @@ module.exports = async bot => {
 				try {
 					await page.waitForNavigation();
 				} catch (e) {
-					bot.log.error(e);
+					updateapi.log.error(e);
 				}
-				bot.log.info('Logged in, screenshot saved as authenticated.png');
+				updateapi.log.info('Logged in, screenshot saved as authenticated.png');
 				await page.screenshot({ path: 'authenticated.png', fullPage: true });
 			} else {
-				bot.log.info('Skipping authentication');
+				updateapi.log.info('Skipping authentication');
 			}
 		} else {
-			bot.log.info('Already logged in!');
+			updateapi.log.info('Already logged in!');
 		}
 	} catch (e) {
-		bot.log.info('Screenshotting as error.png');
+		updateapi.log.info('Screenshotting as error.png');
 		await page.screenshot({ path: 'error.png', fullPage: true });
-		return bot.log.error(e);
+		return updateapi.log.error(e);
 	}
 		
 	for (const p in plugins) {
-		bot.log.info(`Checking '${plugins[p].jar}'`);
+		updateapi.log.info(`Checking '${plugins[p].jar}'`);
 
 		try {
-			await page.waitForTimeout(bot.config.navigation_delay);
+			await page.waitForTimeout(updateapi.config.navigation_delay);
 			await page.goto(`https://www.spigotmc.org/resources/${plugins[p].resource}/updates`);
 			await page.waitForSelector('.downloadButton > a');
 	
@@ -114,21 +114,21 @@ module.exports = async bot => {
 				const url = await page.evaluate(() => document.querySelector('.downloadButton > a').href);
 				latest = (new URL(url)).searchParams.get('version');
 				if (!latest) {
-					bot.log.warn(`Couldn't find a version number for ${p}`);
+					updateapi.log.warn(`Couldn't find a version number for ${p}`);
 					continue;
 				}
 			} catch (e) {
-				bot.log.error(e);
+				updateapi.log.error(e);
 			}
 	
-			let plugin = await bot.db.Plugins.findOne({
+			let plugin = await updateapi.db.Plugins.findOne({
 				where: {
 					name: p
 				}
 			});
 	
 			if (!plugin) {
-				plugin = await bot.db.Plugins.create({
+				plugin = await updateapi.db.Plugins.create({
 					name: p
 				});
 			}
@@ -137,42 +137,50 @@ module.exports = async bot => {
 	
 			// there is a new version
 	
-			bot.log.info(`Found an update for '${plugins[p].jar}'`);
+			updateapi.log.info(`Found an update for '${plugins[p].jar}'`);
 	
-			await plugin.update({
-				latest: latest,
-			});
+			if(updateapi.config.auto_approve) {
+				await plugin.update({
+					approved: latest,
+					latest: latest,
+				});
+				updateapi.log.info(`Auto-approved update for '${plugins[p].jar}'`);
+			} else {
+				await plugin.update({
+					latest: latest,
+				});
+			}
 	
-			let affected = Object.keys(bot.config.servers)
-				.filter(s => bot.config.servers[s].plugins.includes(p))
-				.map(s => `\`${s}\``)
-				.join(', ');
+			// let affected = Object.keys(updateapi.servers)
+			// 	.filter(s => updateapi.servers[s].plugins.includes(p))
+			// 	.map(s => `\`${s}\``)
+			// 	.join(', ');
 	
 	
-			let msg = await bot.channel.send({
-				// new bot.Embed()
-				embeds: [bot.utils.createEmbed()
-					.setColor('ORANGE')
-					.setTitle(`🆕 A new version of ${p} is available`)
-					.setDescription('React with ✅ to approve this update and add it to the queue.')
-					.addField('Changelog', `[View updates on SpigotMC](https://www.spigotmc.org/resources/${plugins[p].resource}/updates)`)
-					.addField('Affected servers', `Servers using this plugin:\n${affected}`)
-					.setFooter(`SpigotMC version ${latest}`)]
-			});
-			msg.react('✅');
-			bot.messages.set(msg.id, {
-				plugin: {
-					name: p,
-					version: latest,
-				}
-			});		
+			// let msg = await bot.channel.send({
+			// 	// new bot.Embed()
+			// 	embeds: [bot.utils.createEmbed()
+			// 		.setColor('ORANGE')
+			// 		.setTitle(`🆕 A new version of ${p} is available`)
+			// 		.setDescription('React with ✅ to approve this update and add it to the queue.')
+			// 		.addField('Changelog', `[View updates on SpigotMC](https://www.spigotmc.org/resources/${plugins[p].resource}/updates)`)
+			// 		.addField('Affected servers', `Servers using this plugin:\n${affected}`)
+			// 		.setFooter(`SpigotMC version ${latest}`)]
+			// });
+			// msg.react('✅');
+			// bot.messages.set(msg.id, {
+			// 	plugin: {
+			// 		name: p,
+			// 		version: latest,
+			// 	}
+			// });		
 		} catch (e) {
-			bot.log.warn('Could not check plugin!')
-			bot.log.error(e);
+			updateapi.log.warn('Could not check plugin!')
+			updateapi.log.error(e);
 		}
 		
 	}
 
-	bot.log.info('Closing browser');
+	updateapi.log.info('Closing browser');
 	await browser.close();	
 };

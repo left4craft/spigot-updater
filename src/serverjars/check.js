@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 
 const { capitalise } = require('../utils');
 
-module.exports = async bot => {
+module.exports = async updateapi => {
 
 	const API = 'https://serverjars.com/api';
 
@@ -15,21 +15,21 @@ module.exports = async bot => {
 				valid.push(n);
 			}	
 		}
-		for (let s in bot.config.servers) {
-			let type = bot.config.servers[s].jar.type;
+		for (let s in updateapi.servers) {
+			let type = updateapi.servers[s].jar.type;
 			if (!valid.includes(type))
-				bot.log.warn(`${s} server has an unsupported jar type: '${type}'`);
+				updateapi.log.warn(`${s} server has an unsupported jar type: '${type}'`);
 		}
 	}
 
 	// get an array of server jar types and make a Set to reduce the number of API calls
-	let projects = new Set(Object.keys(bot.config.servers).map(s => bot.config.servers[s].jar.type));
+	let projects = new Set(Object.keys(updateapi.servers).map(s => updateapi.servers[s].jar.type));
 	for (let p of projects) {
 		// versions of each project
 		let versions = new Set(
-			Object.keys(bot.config.servers)
-				.filter(s => bot.config.servers[s].jar.type === p)
-				.map(s => bot.config.servers[s].jar.version)
+			Object.keys(updateapi.servers)
+				.filter(s => updateapi.servers[s].jar.type === p)
+				.map(s => updateapi.servers[s].jar.version)
 		);
 
 		for (let v of versions) {
@@ -45,10 +45,10 @@ module.exports = async bot => {
 
 				let supported = data.map(ver => ver.version);
 				if (!latest)
-					bot.log.warn(`Couldn't find a build for ${capitalise(p)} ${v}.\nVersions: ${supported.join(', ')}`);
+					updateapi.log.warn(`Couldn't find a build for ${capitalise(p)} ${v}.\nVersions: ${supported.join(', ')}`);
 			}
 
-			let jar = await bot.db.ServerJars.findOne({
+			let jar = await updateapi.db.ServerJars.findOne({
 				where: {
 					type: p,
 					version: v
@@ -56,7 +56,7 @@ module.exports = async bot => {
 			});
 
 			if (!jar) {
-				jar = await bot.db.ServerJars.create({
+				jar = await updateapi.db.ServerJars.create({
 					id: `${p}-${v.replace(/\./g, '-')}`,
 					type: p,
 					version: v
@@ -65,41 +65,58 @@ module.exports = async bot => {
 
 			if (jar.get('latest_build') == latest.built) continue;
 
-			bot.log.info(`Found an update for ${capitalise(p)} ${v}`);
+			updateapi.log.info(`Found an update for ${capitalise(p)} ${v}`);
 
-			jar = await jar.update({
-				latest_version: latest.version,
-				latest_build: latest.built,
-				latest_file: latest.file,
-				latest_checksum: latest.md5,
-			});
+			if(updateapi.config.auto_approve) {
+				jar = await jar.update({
+					latest_version: latest.version,
+					latest_build: latest.built,
+					latest_file: latest.file,
+					latest_checksum: latest.md5,
 
-			let affected = Object.keys(bot.config.servers)
-				.filter(s => bot.config.servers[s].jar.type === p && bot.config.servers[s].jar.version === v)
-				.map(s => `\`${s}\``)
-				.join(', ');
+					approved_version: latest.version,
+					approved_build: latest.built,
+					approved_file: latest.file,
+					approved_checksum: latest.md5,
+				});
+				updateapi.log.info(`Auto-approved update for '${capitalise(p)}'`);
+			} else {
+				jar = await jar.update({
+					latest_version: latest.version,
+					latest_build: latest.built,
+					latest_file: latest.file,
+					latest_checksum: latest.md5,
+				});
+			}
 
-			let msg = await bot.channel.send({
-				// new bot.Embed()
-				embeds: [bot.utils.createEmbed()
-					.setColor('ORANGE')
-					.setTitle(`🆕 A new build of ${capitalise(p)} ${latest.version} is available`)
-					.setDescription('React with ✅ to approve this update and add it to the queue.')
-				// .addField('Changelog', 'ServerJars API does not provide a changelog or commit details.')
-					.addField('Affected servers', `Servers using ${capitalise(p)} ${v}:\n${affected}`)
-					.setFooter(`Built at ${new Date(latest.built * 1000).toLocaleString()}`)]
-			});
-			msg.react('✅');
-			bot.messages.set(msg.id, {
-				server_jar: {
-					type: p,
-					version: v,
-					actual_version: latest.version,
-					build: latest.built,
-					file: latest.file,
-					checksum: latest.md5,
-				}
-			});
+
+
+			// let affected = Object.keys(updateapi.servers)
+			// 	.filter(s => updateapi.servers[s].jar.type === p && updateapi.servers[s].jar.version === v)
+			// 	.map(s => `\`${s}\``)
+			// 	.join(', ');
+
+			// let msg = await bot.channel.send({
+			// 	// new bot.Embed()
+			// 	embeds: [bot.utils.createEmbed()
+			// 		.setColor('ORANGE')
+			// 		.setTitle(`🆕 A new build of ${capitalise(p)} ${latest.version} is available`)
+			// 		.setDescription('React with ✅ to approve this update and add it to the queue.')
+			// 	// .addField('Changelog', 'ServerJars API does not provide a changelog or commit details.')
+			// 		.addField('Affected servers', `Servers using ${capitalise(p)} ${v}:\n${affected}`)
+			// 		.setFooter(`Built at ${new Date(latest.built * 1000).toLocaleString()}`)]
+			// });
+			// msg.react('✅');
+			// bot.messages.set(msg.id, {
+			// 	server_jar: {
+			// 		type: p,
+			// 		version: v,
+			// 		actual_version: latest.version,
+			// 		build: latest.built,
+			// 		file: latest.file,
+			// 		checksum: latest.md5,
+			// 	}
+			// });
 
 		}
 	}

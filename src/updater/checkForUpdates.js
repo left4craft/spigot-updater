@@ -1,13 +1,13 @@
 const fs = require('fs');
 const { path } = require('../utils/fs');
 
-module.exports = async (bot) => {
-	bot.log.info('Checking for server jar updates');
+module.exports = async (updateapi) => {
+	updateapi.log.info('Checking for server jar updates');
 	fs.readdir(path('data/servers/'), (err, items) => {
-		let directories = new Set(Object.keys(bot.config.servers)
+		let directories = new Set(Object.keys(updateapi.servers)
 			.map(s => {
-				let type = bot.config.servers[s].jar.type;
-				let version = bot.config.servers[s].jar.version;
+				let type = updateapi.servers[s].jar.type;
+				let version = updateapi.servers[s].jar.version;
 				return `${type}-${version.replace(/\./g, '-')}`;
 			}));
 
@@ -18,15 +18,15 @@ module.exports = async (bot) => {
 		}
 	});
 
-	if (bot.config.server_jars_api.toLowerCase() === 'papermc')
-		await require('../paper/check')(bot);
+	if (updateapi.config.server_jars_api.toLowerCase() === 'papermc')
+		await require('../paper/check')(updateapi);
 	else
-		await require('../serverjars/check')(bot);
+		await require('../serverjars/check')(updateapi);
 	
 	
-	bot.log.info('Checking for plugin updates');
-	await require('../spigot/check')(bot);
-	await require('../bukkit/check')(bot);
-	await require('../github/check')(bot);
-	await require('../jenkins/check')(bot);
+	updateapi.log.info('Checking for plugin updates');
+	await require('../spigot/check')(updateapi);
+	await require('../bukkit/check')(updateapi);
+	await require('../github/check')(updateapi);
+	await require('../jenkins/check')(updateapi);
 };

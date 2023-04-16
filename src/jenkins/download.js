@@ -4,23 +4,23 @@ const fs = require('fs');
 
 const { path, unzip } = require('../utils/fs');
 
-module.exports = async bot => {
+module.exports = async updateapi => {
 
-	bot.log.info('Clearing temp directory');
+	updateapi.log.info('Clearing temp directory');
 	for (const file of fs.readdirSync(path('data/temp/'))) {
 		fs.unlinkSync(path('data/temp/' + file));
 	}
 
-	bot.log.info('Checking for updates for plugins on Jenkins');
+	updateapi.log.info('Checking for updates for plugins on Jenkins');
 
 	let plugins = {};
-	Object.keys(bot.config.plugins)
-		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'jenkins')
-		.forEach(plugin => plugins[plugin] = bot.config.plugins[plugin]);
+	Object.keys(updateapi.plugins)
+		.filter(plugin => updateapi.plugins[plugin].source.toLowerCase() === 'jenkins')
+		.forEach(plugin => plugins[plugin] = updateapi.plugins[plugin]);
 
 	for (const p in plugins) {
 
-		let plugin = await bot.db.Plugins.findOne({
+		let plugin = await updateapi.db.Plugins.findOne({
 			where: {
 				name: p
 			}
@@ -40,7 +40,7 @@ module.exports = async bot => {
 		let { artifacts } = await (await fetch(host + `job/${plugins[p].job}/${build}/api/json`)).json();
 
 		if (!artifacts) {
-			bot.log.warn(`Failed to get artifacts for ${p}`);
+			updateapi.log.warn(`Failed to get artifacts for ${p}`);
 			continue;
 		}
 
@@ -53,7 +53,7 @@ module.exports = async bot => {
 		}
 		
 		if (!item) {
-			bot.log.warn(`Failed to find artifact for ${p}`);
+			updateapi.log.warn(`Failed to find artifact for ${p}`);
 			continue;
 		}
 
@@ -62,18 +62,18 @@ module.exports = async bot => {
 
 		fs.writeFileSync(path(`data/temp/${plugins[p].jar}`), await download(url));
 
-		bot.log.info(`Downloaded ${plugins[p].jar} (${build}): plugins/${plugins[p].jar}`);
+		updateapi.log.info(`Downloaded ${plugins[p].jar} (${build}): plugins/${plugins[p].jar}`);
 
 		let temp = fs.readdirSync(path('data/temp/'));
 		if (temp.length < 1) {
-			bot.log.warn(`Failed to download ${p}`);
+			updateapi.log.warn(`Failed to download ${p}`);
 			continue;
 		}
 
 		let file = temp[0];
 
 		if (plugins[p].zip_path && file.toLowerCase().endsWith('.zip')) {
-			bot.log.info('Extracting...');
+			updateapi.log.info('Extracting...');
 			await unzip(
 				plugins[p].zip_path,
 				path(`data/temp/${file}`),

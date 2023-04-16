@@ -5,18 +5,18 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(StealthPlugin());
 // puppeteer.use(AdblockerPlugin());
 
-module.exports = async bot => {
+module.exports = async updateapi => {
 
 	let plugins = {};
-	Object.keys(bot.config.plugins)
-		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'bukkit')
-		.forEach(plugin => plugins[plugin] = bot.config.plugins[plugin]);
+	Object.keys(updateapi.plugins)
+		.filter(plugin => updateapi.plugins[plugin].source.toLowerCase() === 'bukkit')
+		.forEach(plugin => plugins[plugin] = updateapi.plugins[plugin]);
 
 	if (plugins.length < 1)
-		return bot.log.info('No bukkit plugins need to be checked, skipping bukkit browser');
+		return updateapi.log.info('No bukkit plugins need to be checked, skipping bukkit browser');
 
-	bot.log.info('Checking for updates for plugins on bukkit');
-	bot.log.info('Starting browser');
+	updateapi.log.info('Checking for updates for plugins on bukkit');
+	updateapi.log.info('Starting browser');
 
 	const {
 		PROXY,
@@ -27,19 +27,19 @@ module.exports = async bot => {
 
 	if(CHROMEPATH) {
 		browser = await puppeteer.launch({
-			headless: bot.config.headless_browser,
+			headless: updateapi.config.headless_browser,
 			executablePath: CHROMEPATH,
 			args: [
-				bot.config.no_sandbox_browser ? '--no-sandbox' : '',
+				updateapi.config.no_sandbox_browser ? '--no-sandbox' : '',
 				PROXY ? '--proxy-server=' + PROXY : ''
 			],
 			userDataDir: 'data/sessioninfo/'
 		});
 	} else {
 		browser = await puppeteer.launch({
-			headless: bot.config.headless_browser,
+			headless: updateapi.config.headless_browser,
 			args: [
-				bot.config.no_sandbox_browser ? '--no-sandbox' : '',
+				updateapi.config.no_sandbox_browser ? '--no-sandbox' : '',
 				PROXY ? '--proxy-server=' + PROXY : ''
 			],
 			userDataDir: 'data/sessioninfo/'
@@ -47,14 +47,14 @@ module.exports = async bot => {
 	}
 
 	const page = await browser.newPage();
-	await page.setDefaultTimeout(bot.config.cloudflare_timeout);
-	await page.setDefaultNavigationTimeout(bot.config.cloudflare_timeout);
+	await page.setDefaultTimeout(updateapi.config.cloudflare_timeout);
+	await page.setDefaultNavigationTimeout(updateapi.config.cloudflare_timeout);
 		
 	for (const p in plugins) {
-		bot.log.info(`Checking '${plugins[p].jar}'`);
+		updateapi.log.info(`Checking '${plugins[p].jar}'`);
 
 		try {
-			await page.waitForTimeout(bot.config.navigation_delay);
+			await page.waitForTimeout(updateapi.config.navigation_delay);
 
 			let url = plugins[p].url
 			if(url[url.length - 1] !== '/') url += '/';
@@ -69,21 +69,21 @@ module.exports = async bot => {
 				const parts = url.split('/');
 				latest = parts[parts.length - 2]; // subtract 2 for next to last element bc zero indexed
 				if (!latest) {
-					bot.log.warn(`Couldn't find a version number for ${p}`);
+					updateapi.log.warn(`Couldn't find a version number for ${p}`);
 					continue;
 				}
 			} catch (e) {
-				bot.log.error(e);
+				updateapi.log.error(e);
 			}
 	
-			let plugin = await bot.db.Plugins.findOne({
+			let plugin = await updateapi.db.Plugins.findOne({
 				where: {
 					name: p
 				}
 			});
 	
 			if (!plugin) {
-				plugin = await bot.db.Plugins.create({
+				plugin = await updateapi.db.Plugins.create({
 					name: p
 				});
 			}
@@ -92,42 +92,35 @@ module.exports = async bot => {
 	
 			// there is a new version
 	
-			bot.log.info(`Found an update for '${plugins[p].jar}'`);
+			updateapi.log.info(`Found an update for '${plugins[p].jar}'`);
 	
-			await plugin.update({
-				latest: latest,
-			});
+			if(updateapi.config.auto_approve) {
+				await plugin.update({
+					approved: latest,
+					latest: latest,
+				});
+				updateapi.log.info(`Auto-approved update for '${plugins[p].jar}'`);
+			} else {
+				await plugin.update({
+					latest: latest,
+				});
+			}
+
 	
-			let affected = Object.keys(bot.config.servers)
-				.filter(s => bot.config.servers[s].plugins.includes(p))
+			let affected = Object.keys(updateapi.servers)
+				.filter(s => updateapi.servers[s].plugins.includes(p))
 				.map(s => `\`${s}\``)
 				.join(', ');
 	
 	
-			let msg = await bot.channel.send({
-				// new bot.Embed()
-				embeds: [bot.utils.createEmbed()
-					.setColor('ORANGE')
-					.setTitle(`🆕 A new version of ${p} is available`)
-					.setDescription('React with ✅ to approve this update and add it to the queue.')
-					.addField('Changelog', `[View updates on Bukkit](${url}files/${latest})`)
-					.addField('Affected servers', `Servers using this plugin:\n${affected}`)
-					.setFooter(`Bukkit version ${latest}`)]
-			});
-			msg.react('✅');
-			bot.messages.set(msg.id, {
-				plugin: {
-					name: p,
-					version: latest,
-				}
-			});		
+			console.log('Affected by update: ' + affected)
 		} catch (e) {
-			bot.log.warn('Could not check plugin!')
-			bot.log.error(e);
+			updateapi.log.warn('Could not check plugin!')
+			updateapi.log.error(e);
 		}
 		
 	}
 
-	bot.log.info('Closing browser');
+	updateapi.log.info('Closing browser');
 	await browser.close();	
 };

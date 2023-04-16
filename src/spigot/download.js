@@ -9,20 +9,20 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(StealthPlugin());
 // puppeteer.use(AdblockerPlugin());
 
-module.exports = async bot => {
+module.exports = async updateapi => {
 
-	bot.log.info('Clearing temp directory');
+	updateapi.log.info('Clearing temp directory');
 	for (const file of fs.readdirSync(path('data/temp/'))) {
 		fs.unlinkSync(path('data/temp/' + file));
 	}
 
 
-	let plugin_names = Object.keys(bot.config.plugins)
-		.filter(plugin => bot.config.plugins[plugin].source.toLowerCase() === 'spigot');
+	let plugin_names = Object.keys(updateapi.plugins)
+		.filter(plugin => updateapi.plugins[plugin].source.toLowerCase() === 'spigot');
 	for(let i = 0; i < plugin_names.length; i = i + 1) {
 		let plugin = plugin_names[i];
 		if(plugin === undefined) continue;
-		let p = await bot.db.Plugins.findOne({
+		let p = await updateapi.db.Plugins.findOne({
 			where: {
 				name: plugin
 			}
@@ -33,12 +33,12 @@ module.exports = async bot => {
 		}
 	}
 	let plugins = {};
-	plugin_names.forEach(name => plugins[name] = bot.config.plugins[name]);
+	plugin_names.forEach(name => plugins[name] = updateapi.plugins[name]);
 
 	if (plugin_names.length < 1)
-		return bot.log.info('No spigot plugins need to be downloaded, skipping spigot browser');
+		return updateapi.log.info('No spigot plugins need to be downloaded, skipping spigot browser');
 
-	bot.log.info('Starting browser');
+	updateapi.log.info('Starting browser');
 
 	const {
 		PROXY,
@@ -49,19 +49,19 @@ module.exports = async bot => {
 
 	if(CHROMEPATH) {
 		browser = await puppeteer.launch({
-			headless: bot.config.headless_browser,
+			headless: updateapi.config.headless_browser,
 			executablePath: CHROMEPATH,
 			args: [
-				bot.config.no_sandbox_browser ? '--no-sandbox' : '',
+				updateapi.config.no_sandbox_browser ? '--no-sandbox' : '',
 				PROXY ? '--proxy-server=' + PROXY : ''
 			],
 			userDataDir: 'data/sessioninfo/'
 		});
 	} else {
 		browser = await puppeteer.launch({
-			headless: bot.config.headless_browser,
+			headless: updateapi.config.headless_browser,
 			args: [
-				bot.config.no_sandbox_browser ? '--no-sandbox' : '',
+				updateapi.config.no_sandbox_browser ? '--no-sandbox' : '',
 				PROXY ? '--proxy-server=' + PROXY : ''
 			],
 			userDataDir: 'data/sessioninfo/'
@@ -69,28 +69,35 @@ module.exports = async bot => {
 	}
 
 	const page = await browser.newPage();
-	await page.setDefaultTimeout(bot.config.cloudflare_timeout);
-	await page.setDefaultNavigationTimeout(bot.config.cloudflare_timeout);
+	await page.setDefaultTimeout(updateapi.config.cloudflare_timeout);
+	await page.setDefaultNavigationTimeout(updateapi.config.cloudflare_timeout);
 
 	// // auto continue all requests to stop console error spam
 	// page.on('request', request => Promise.resolve().then(() => request.continue()).catch(() => {}));
 
-	await page._client.send('Page.setDownloadBehavior', {
+	const client = await page.target().createCDPSession();
+	await client.send('Page.setDownloadBehavior', {
 		behavior: 'allow',
-		downloadPath: path('data/temp/')
+		downloadPath: path('data/temp/'),
 	});
-	await page.waitForTimeout(bot.config.navigation_delay);
-	bot.log.info('Loading spigotmc.org (waiting for Cloudflare)');
+
+	// await page._client.send('Page.setDownloadBehavior', {
+	// 	behavior: 'allow',
+	// 	downloadPath: path('data/temp/')
+	// });
+
+	await page.waitForTimeout(updateapi.config.navigation_delay);
+	updateapi.log.info('Loading spigotmc.org (waiting for Cloudflare)');
 	await page.goto('https://www.spigotmc.org/login');
-	// await page.waitForTimeout(bot.config.cloudflare_timeout);
+	// await page.waitForTimeout(updateapi.config.cloudflare_timeout);
 	try {
 		await page.waitForSelector('.spigot_colorOverlay');
-		bot.log.info('Loaded spigotmc.org! Saving screenshot as loaded.png...');
-		await page.waitForTimeout(bot.config.navigation_delay);
+		updateapi.log.info('Loaded spigotmc.org! Saving screenshot as loaded.png...');
+		await page.waitForTimeout(updateapi.config.navigation_delay);
 		await page.screenshot({ path: 'loaded.png', fullPage: true });
 
 		if(page.url().endsWith('login')) {
-			bot.log.info('Found login page, attempting to log in...');
+			updateapi.log.info('Found login page, attempting to log in...');
 			// await page.waitForNavigation();
 		
 			const {
@@ -98,11 +105,11 @@ module.exports = async bot => {
 				SPIGOT_PASSWORD
 			} = process.env;
 			if (SPIGOT_EMAIL && SPIGOT_PASSWORD) {
-				bot.log.info('Logging into SpigotMC');
+				updateapi.log.info('Logging into SpigotMC');
 				try {
 					await page.type('#ctrl_pageLogin_login', SPIGOT_EMAIL);
 				} catch (e) {
-					return bot.log.error(e);
+					return updateapi.log.error(e);
 				}
 				await page.keyboard.press('Tab');
 				await page.keyboard.type(SPIGOT_PASSWORD);
@@ -111,27 +118,27 @@ module.exports = async bot => {
 				try {
 					await page.waitForNavigation();
 				} catch (e) {
-					bot.log.error(e);
+					updateapi.log.error(e);
 				}
-				bot.log.info('Logged in, screenshot saved as authenticated.png');
+				updateapi.log.info('Logged in, screenshot saved as authenticated.png');
 				await page.screenshot({ path: 'authenticated.png', fullPage: true });
 			} else {
-				bot.log.info('Skipping authentication');
+				updateapi.log.info('Skipping authentication');
 			}
 		} else {
-			bot.log.info('Already logged in!');
+			updateapi.log.info('Already logged in!');
 		}
 	} catch (e) {
-		bot.log.info('Screenshotting as error.png');
+		updateapi.log.info('Screenshotting as error.png');
 		await page.screenshot({ path: 'error.png', fullPage: true });
-		return bot.log.error(e);
+		return updateapi.log.error(e);
 	}
 
 	for (const p in plugins) {
-		bot.log.info(`Updating download for '${plugins[p].jar}'`);
+		updateapi.log.info(`Updating download for '${plugins[p].jar}'`);
 
 		try {
-			let plugin = await bot.db.Plugins.findOne({
+			let plugin = await updateapi.db.Plugins.findOne({
 				where: {
 					name: p
 				}
@@ -149,26 +156,26 @@ module.exports = async bot => {
 			let url = `https://www.spigotmc.org/resources/${plugins[p].resource}/download?version=${version}`;
 	
 			try {
-				await page.waitForTimeout(bot.config.navigation_delay);
-				bot.log.info(`Downloading ${p} (${version}): plugins/${plugins[p].jar}`);
+				await page.waitForTimeout(updateapi.config.navigation_delay);
+				updateapi.log.info(`Downloading ${p} (${version}): plugins/${plugins[p].jar}`);
 				await page.goto(url);
 			} catch (e) {
-				// bot.log.info('Download error: ');
-				// bot.log.error(e); // it doesn't like downloading
+				// updateapi.log.info('Download error: ');
+				// updateapi.log.error(e); // it doesn't like downloading
 			}
 	
-			await page.waitForTimeout(bot.config.download_time);
+			await page.waitForTimeout(updateapi.config.download_time);
 	
 			let temp = fs.readdirSync(path('data/temp/'));
 			if (temp.length < 1) {
-				bot.log.warn(`Failed to download ${p}`);
+				updateapi.log.warn(`Failed to download ${p}`);
 				continue;
 			}
 	
 			let file = temp[0];
 	
 			if (plugins[p].zip_path && file.toLowerCase().endsWith('.zip')) {
-				bot.log.info('Extracting...');
+				updateapi.log.info('Extracting...');
 				await unzip(
 					plugins[p].zip_path,
 					path(`data/temp/${file}`),
@@ -183,12 +190,12 @@ module.exports = async bot => {
 				downloaded: version
 			});	
 		} catch (e) {
-			bot.log.warn('Could not download plugin!')
-			bot.log.error(e);
+			updateapi.log.warn('Could not download plugin!')
+			updateapi.log.error(e);
 		}
 	}
 
-	bot.log.info('Closing browser');
+	updateapi.log.info('Closing browser');
 	await browser.close();
 
 };

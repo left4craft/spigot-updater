@@ -1,6 +1,6 @@
 class Updater {
-	constructor(bot) {
-		this.bot = bot;
+	constructor(updateapi) {
+		this.updateapi = updateapi;
 		this.checkForUpdates = require('./checkForUpdates');
 		this.downloadServers = require('./downloadServers');
 		this.downloadPlugins = require('./downloadPlugins');
@@ -9,36 +9,24 @@ class Updater {
 
 	async check() {
 		let message = 'Running daily update check task';
-		this.bot.log.info(message);
-		/* this.bot.channel.send(
-			new this.bot.Embed()
-				.setTitle(`❗ ${message}`)
-		); */
-		
-		await this.checkForUpdates(this.bot);
+		this.updateapi.log.info(message);
+
+		await this.checkForUpdates(this.updateapi);
 	}
 
 	async download() {
 		let message = 'Running hourly download task';
-		this.bot.log.info(message);
-		/* this.bot.channel.send(
-			new this.bot.Embed()
-				.setTitle(`❗ ${message}`)
-		); */
+		this.updateapi.log.info(message);
 
-		await this.downloadServers(this.bot);
-		await this.downloadPlugins(this.bot);
+		await this.downloadServers(this.updateapi);
+		await this.downloadPlugins(this.updateapi);
 	}
 	
 	async run() {
 		let message = 'Running bi-daily upload task';
-		this.bot.log.info(message);
-		/* this.bot.channel.send(
-			new this.bot.Embed()
-				.setTitle(`❗ ${message}`)
-		); */
+		this.updateapi.log.info(message);
 
-		await this.uploadFiles(this.bot);
+		await this.uploadFiles(this.updateapi);
 	}
 }
 
