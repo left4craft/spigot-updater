@@ -1,15 +1,10 @@
-# Folders
+.DS_Store
 node_modules
-logs/
-data/temp
-data/plugins
-data/servers
-.vscode/
-
-# Files
-data/servers.json
-data/plugins.json
-data/sessioninfo
+/build
+/.svelte-kit
+/package
 .env
-/*.png
-config/config.js
+.env.*
+!.env.example
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*

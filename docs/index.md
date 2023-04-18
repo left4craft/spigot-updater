@@ -1,15 +1,11 @@
-![GitHub issues](https://img.shields.io/github/issues/Left4Craft/spigot-updater?style=for-the-badge)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/Left4Craft/spigot-updater?style=for-the-badge)
-![GitHub Repo stars](https://img.shields.io/github/stars/Left4Craft/spigot-updater?style=for-the-badge)
-![GitHub deployments](https://img.shields.io/github/deployments/Left4Craft/spigot-updater/github-pages?label=GitHub%20Pages&style=for-the-badge)
-![GitHub top language](https://img.shields.io/github/languages/top/Left4Craft/spigot-updater?color=yellow&style=for-the-badge)
-![GitHub tag (latest SemVer pre-release)](https://img.shields.io/github/v/tag/Left4Craft/spigot-updater?include_prereleases&style=for-the-badge)
-![GitHub](https://img.shields.io/github/license/Left4Craft/spigot-updater?style=for-the-badge)
-<!-- ![GitHub package.json version](https://img.shields.io/github/package-json/v/Left4Craft/spigot-updater?style=for-the-badge) -->
-
-# Spigot updater
+# Plumber
 
 **An automated update system for Pterodactyl Minecraft servers and their plugins.**
+
+
+?> **Tip** test
+
+!> **Important** test
 
 Originally made for [Left4Craft](https://www.left4craft.org), this tool integrates with Discord, Pterodactyl, and various other APIs to keep your servers and their plugins up to date with minimal input from owners and admins.
 

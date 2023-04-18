@@ -12,8 +12,8 @@ const Updater = require('./updater');
 
 const updateapi = {
 	config: require('../config/config'),
-	servers: require('../config/servers'),
-	plugins: require('../config/plugins'),
+	servers: require('../../config/servers'),
+	plugins: require('../../config/plugins'),
 }
 
 const { Logger } = require('leekslazylogger');

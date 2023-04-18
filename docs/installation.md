@@ -13,6 +13,7 @@
 1. Create a new server with [a Node.JS egg](https://github.com/parkervcp/eggs/tree/master/bots/discord/discord.js), using this repository
 2. Set the "Bot js file" to `src/index.js`
 3. On the host machine, create a new file called `Dockerfile`:
+
 ```
 FROM node:lts-slim
 
@@ -38,6 +39,7 @@ CMD         ["/bin/bash", "/entrypoint.sh"]
 ```
 
 4. Copy the [nodejs entrypoint.sh file](https://github.com/pterodactyl/images/blob/nodejs/entrypoint.sh) into the same directory as Dockerfile, and save it as `entrypoint.sh`
+
 ```
 #!/bin/ash
 cd /home/container

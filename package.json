@@ -1,52 +1,30 @@
 {
 	"name": "spigot-updater",
-	"version": "2.0.0",
+	"version": "0.0.1",
 	"private": true,
-	"description": "An automated update system for Pterodactyl Minecraft servers and their plugins.",
-	"main": "src/index.js",
-	"dependencies": {
-		"dotenv": "^16.0.3",
-		"download": "^8.0.0",
-		"form-data": "^4.0.0",
-		"hasha": "^5.2.2",
-		"leekslazylogger": "^5.0.1",
-		"minecraft-server-util": "^5.4.1",
-		"mysql2": "^3.2.0",
-		"node-fetch": "^2.6.9",
-		"puppeteer": "^19.8.2",
-		"puppeteer-extra": "^3.3.6",
-		"puppeteer-extra-plugin-adblocker": "^2.13.6",
-		"puppeteer-extra-plugin-stealth": "^2.11.2",
-		"sequelize": "^6.30.0",
-		"unzipper": "^0.10.11"
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"eslint": "^8.37.0",
-		"nodemon": "^2.0.22"
+		"@sveltejs/kit": "^1.5.0",
+		"autoprefixer": "^10.4.14",
+		"eslint": "^8.28.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-svelte3": "^4.0.0",
+		"postcss": "^8.4.22",
+		"prettier": "^2.8.0",
+		"prettier-plugin-svelte": "^2.8.1",
+		"svelte": "^3.54.0",
+		"tailwindcss": "^3.3.1",
+		"vite": "^4.2.0"
 	},
-	"scripts": {
-		"start": "node src/",
-		"test": "echo \"Nothing to test! Run with 'npm start'\" && exit 1"
-	},
-	"engines": {
-		"node": ">=14"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/left4craft/spigot-updater.git"
-	},
-	"keywords": [
-		"left4craft",
-		"spigot",
-		"discord",
-		"bot",
-		"pterodactyl"
-	],
-	"author": "eartharoid",
-	"license": "GPL-3.0",
-	"bugs": {
-		"url": "https://github.com/left4craft/spigot-updater/issues"
-	},
-	"homepage": "https://github.com/left4craft/spigot-updater/#readme",
-	"funding": "https://github.com/left4craft/spigot-updater/?sponsor=1"
+	"type": "module",
+	"dependencies": {
+		"@material-tailwind/html": "^2.0.0",
+		"@sveltejs/adapter-node": "^1.2.3"
+	}
 }
