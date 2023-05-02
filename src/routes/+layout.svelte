@@ -13,6 +13,4 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </svelte:head>
 
-<div class="h-full bg-midnight-900 text-midnight-50">
-	<slot />
-</div>
+<slot />
