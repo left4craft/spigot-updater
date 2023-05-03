@@ -17,7 +17,6 @@
 			: server.state === 'online'
 			? 'text-light-green-500'
 			: 'text-red-500';
-	const icons = [];
 </script>
 
 <div class="shadow-card rounded-xl bg-midnight-800 bg-clip-border">
@@ -79,27 +78,35 @@
 					</li>
 				</ul>
 			</div>
-			<div class="flex flex-row justify-center items-center gap-4">
+			<div class="flex flex-row flex-wrap justify-center items-center gap-4">
 				<a href={server.console} target="_blank">
 					<button
-						class="middle none center rounded-lg bg-midnight-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-midnight-400/20 transition-all hover:shadow-lg hover:shadow-midnight-400/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+						class="button bg-midnight-400/10 text-midnight-400 border border-midnight-400/20 hover:shadow-midnight-400/40"
 						data-ripple-dark="true"
 					>
-						Console
+						Open Console
 					</button>
 				</a>
 				<!-- <button
-			class="middle none center rounded-lg bg-primary hover:bg-secondary focus:bg-secondary  py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-primary/20 transition-all hover:shadow-lg hover:shadow-secondary/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-			data-ripple-dark="true"
-		>
-			Update
-		</button> -->
-				<button
-					class="middle none center rounded-lg bg-deep-orange-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-deep-orange-500/20 transition-all hover:shadow-lg hover:shadow-deep-orange-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+					class="middle none center rounded-lg bg-primary hover:bg-secondary focus:bg-secondary py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-primary/20 transition-all hover:shadow-lg hover:shadow-secondary/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
 					data-ripple-dark="true"
 				>
 					Update
-				</button>
+				</button> -->
+				{#if server.updatable}
+					<!-- <button
+						class="button bg-deep-orange-500 text-white shadow-deep-orange-500/20 hover:shadow-deep-orange-500/40"
+						data-ripple-dark="true"
+					>
+						Update
+					</button> -->
+					<button
+						class="button bg-deep-orange-500/10 text-deep-orange-500 border border-deep-orange-500/20 hover:shadow-deep-orange-500/40"
+						data-ripple-dark="true"
+					>
+						Update
+					</button>
+				{/if}
 			</div>
 		</div>
 	</div>

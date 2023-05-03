@@ -13,6 +13,7 @@ export function load() {
 					installedCount: 8,
 					updatableCount: 2
 				},
+				updatable: true,
 				software: {
 					type: 'waterfall',
 					versionsBehind: 0,
@@ -28,6 +29,7 @@ export function load() {
 					installedCount: 10,
 					updatableCount: 3
 				},
+				updatable: true,
 				software: {
 					type: 'paper',
 					versionsBehind: 7,
@@ -38,11 +40,12 @@ export function load() {
 				id: '340e015b',
 				console: 'https://panel.left4craft.org/',
 				state: 'updating',
-				playerCount: 0,
+				playerCount: 1,
 				plugins: {
 					installedCount: 27,
 					updatableCount: 4
 				},
+				updatable: true,
 				software: {
 					type: 'paper',
 					versionsBehind: 7,
@@ -58,6 +61,7 @@ export function load() {
 					installedCount: 27,
 					updatableCount: 4
 				},
+				updatable: true,
 				software: {
 					type: 'paper',
 					versionsBehind: 7,
@@ -73,6 +77,7 @@ export function load() {
 					installedCount: 27,
 					updatableCount: 4
 				},
+				updatable: true,
 				software: {
 					type: 'paper',
 					versionsBehind: 7,

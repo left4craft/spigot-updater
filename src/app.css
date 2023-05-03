@@ -2,7 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {}
+@layer components {
+	.button {
+		@apply rounded-lg py-3 px-6 font-sans text-xs font-bold uppercase shadow-md transition-all hover:shadow-lg focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none;
+	}
+}
 
 html, body {
 	height: 100%;
