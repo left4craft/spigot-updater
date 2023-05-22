@@ -4,10 +4,7 @@
 </script>
 
 <nav class="p-8 mb-8 text-center">
-	<span class="text-2xl font-bold font-mono tracking-wide">
-		<a href="/"> Plumber </a>
-	</span>
-	<span class="mx-6 text-2xl text-midnight-400">|</span>
+	<span class="text-2xl font-bold font-mono tracking-wide"><a href="/">Plumber</a></span><span class="mx-6 text-2xl text-midnight-400">|</span>
 	{#if Object.keys($page.data.session || {}).length}
 		<button on:click={() => signOut()} title="Logout">
 			<img

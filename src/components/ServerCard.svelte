@@ -81,7 +81,7 @@
 			<div class="flex flex-row flex-wrap justify-center items-center gap-4">
 				<a href={server.console} target="_blank">
 					<button
-						class="button bg-midnight-400/10 text-midnight-400 border border-midnight-400/20 hover:shadow-midnight-400/40"
+						class="button bg-midnight-400/10 text-midnight-200 border border-midnight-400/20 hover:shadow-midnight-400/40"
 						data-ripple-dark="true"
 					>
 						Open Console
